@@ -2,9 +2,9 @@ import { Button } from "@/components/ui/button";
 
 function Page2() {
   return (
-    <div className="lg:grid lg:grid-cols-[30%,70%] min-h-[600px] border border-[#006D75] p-4 m-4 ">
+    <div className="lg:grid lg:grid-cols-[30%,70%]  min-h-[600px] border border-[#006D75] p-4 m-4 ">
       {/* Left Column */}
-      <div className="border-2 flex flex-col gap-4 border-[#004953] bg-[#002c36] text-white m-2 p-2 rounded-md">
+      <div className="border-2 flex  flex-col gap-4 border-[#004953] bg-[#002c36] text-white m-2 p-2 rounded-md">
         <a href="#">
           <div className="p-2 bg-[#00363e] rounded-md">
             <p className="font-bold text-lg">Realtime database</p>
@@ -60,7 +60,7 @@ function Page2() {
       </div>
 
       {/* Right Column */}
-      <div className="border-2  border-[#004953]  text-white m-2 p-2 rounded-md">
+      <div className="border-2 min-h-[200px] bg-[url('/page2.png')] bg-cover bg-center border-[#004953]  text-white m-2 p-2 rounded-md">
       
       </div>
     </div>
