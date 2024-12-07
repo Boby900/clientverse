@@ -1,0 +1,20 @@
+name: Label Pull Request
+
+on:
+  pull_request:
+    types:
+      - opened
+      - reopened
+
+jobs:
+  add-label:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout Repository
+        uses: actions/checkout@v3
+
+      - name: Add Label to Pull Request
+        uses: actions-ecosystem/action-add-labels@v1.1.0
+        with:
+          github_token: ${{ secrets.GITHUB_TOKEN }}
+          labels: "client-app"
