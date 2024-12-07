@@ -3,6 +3,7 @@ on:
   pull_request:
     branches:
       - main
+      - master
     types:
       - opened
 
@@ -10,6 +11,9 @@ jobs:
   add-label:
     name: Add Label
     runs-on: ubuntu-latest
+    permissions:
+      issues: write
+      pull-requests: write
     steps:
       - uses: actions/checkout@v2
       - uses: christianvuerings/add-labels@v1
