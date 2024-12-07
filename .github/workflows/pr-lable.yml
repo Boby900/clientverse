@@ -1,23 +1,21 @@
-name: Label Pull Request
-
+name: Add Label
 on:
   pull_request:
+    branches:
+      - main
     types:
       - opened
-      - reopened
 
 jobs:
   add-label:
+    name: Add Label
     runs-on: ubuntu-latest
-    permissions:
-        issues: write
-        pull-requests: write
     steps:
-      - name: Checkout Repository
-        uses: actions/checkout@v3
-
-      - name: Add Label to Pull Request
-        uses: actions-ecosystem/action-add-labels@v1.1.0
+      - uses: actions/checkout@v2
+      - uses: christianvuerings/add-labels@v1
         with:
-          github_token: ${{ secrets.GITHUB_TOKEN }}
-          labels: "client-app"
+          labels: |
+            minor release
+            bug
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
