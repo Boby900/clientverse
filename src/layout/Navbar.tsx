@@ -1,5 +1,14 @@
+import {
+  DropdownMenuContent,
+  DropdownMenuItem,
+  DropdownMenuSeparator,
+} from "@/components/ui/dropdown-menu";
 import { Input } from "@/components/ui/input";
-import { FlameIcon, Github, Menu } from "lucide-react";
+import {
+  DropdownMenu,
+  DropdownMenuTrigger,
+} from "@radix-ui/react-dropdown-menu";
+import { Check, FlameIcon, Github, Menu } from "lucide-react";
 
 function Navbar() {
   return (
@@ -21,16 +30,78 @@ function Navbar() {
           </li>
           <li className="hidden lg:block">FAQ</li>
           <li className="hidden lg:block">
-           <a href="#"><Github /></a> 
+            <a href="#">
+              <Github />
+            </a>
           </li>
           <li>
-            <a href="#" className="hidden lg:block">Documentation.</a>
+            <a href="#" className="hidden lg:block">
+              Documentation
+            </a>
           </li>
           <li className="lg:hidden flex-shrink-0 max-w-full">
-            <a href="" className="block"><Menu /></a>
+            <a href="" className="block">
+              <DropdownMenu>
+                <DropdownMenuTrigger>
+                  <Menu />
+                </DropdownMenuTrigger>
+                <DropdownMenuContent>
+                  <DropdownMenuSeparator />
+                  <DropdownMenuItem>
+                    <span>FAQ</span>
+                  </DropdownMenuItem>
+                  <DropdownMenuItem>
+                    <span>Documentation</span>
+                  </DropdownMenuItem>
+                  <DropdownMenuItem>
+                    <span>Discussions</span>
+                  </DropdownMenuItem>
+                </DropdownMenuContent>
+              </DropdownMenu>
+            </a>
           </li>
         </ul>
       </nav>
+      <main>
+        <h4 className="text-center text-3xl text-yellow-50 font-thin m-4 p-4">
+          Open Source CMS <br />
+          for your next <strong>SaaS</strong> and <strong>Web app </strong>
+          <br />
+          <strong>in 1 place</strong>
+        </h4>
+        <div className="flex flex-wrap  border max-h-full max-w-full gap-4 justify-center p-4 m-4 rounded-full bg-slate-800">
+          <div className="flex">
+            <span>
+              <Check />
+            </span>
+            Realtime db
+          </div>
+          <div className="flex">
+            <span>
+              <Check />
+            </span>
+            Authentication
+          </div>
+          <div className="flex">
+            <span>
+              <Check />
+            </span>
+            File storage
+          </div>
+          <div className="flex">
+            <span>
+              <Check />
+            </span>
+            Dashboard
+          </div>
+          <div className="flex">
+            <span>
+              <Check />
+            </span>
+            Websockets
+          </div>
+        </div>
+      </main>
     </div>
   );
 }

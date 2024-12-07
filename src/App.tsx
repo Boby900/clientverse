@@ -1,6 +1,7 @@
 
 import './App.css'
-import Navbar from './layout/navbar'
+import Main from './layout/Main'
+import Navbar from './layout/Navbar'
 
 function App() {
  
@@ -8,6 +9,7 @@ function App() {
   return (
     <div>
        <Navbar />
+       <Main />
     </div>
   )
 }
