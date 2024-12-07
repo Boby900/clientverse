@@ -1,17 +1,19 @@
 
 import './App.css'
-import { Button } from './components/ui/button'
+import Footer from './layout/Footer'
+import Main from './layout/Main'
+import Navbar from './layout/Navbar'
+import Page2 from './layout/Page2'
 
 function App() {
  
 
   return (
     <div>
-       <h1 className="text-3xl font-bold bg-gray-500 underline ">
-      Hello world!
-    </h1>
-    <p className='animate-bounce delay-150 duration-300 ...'>Testing</p>
-    <Button>Hi</Button>
+       <Navbar />
+       <Main />
+       <Page2 />
+       <Footer />
     </div>
   )
 }
