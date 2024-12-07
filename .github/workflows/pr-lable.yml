@@ -9,6 +9,9 @@ on:
 jobs:
   add-label:
     runs-on: ubuntu-latest
+    permissions:
+        issues: write
+        pull-requests: write
     steps:
       - name: Checkout Repository
         uses: actions/checkout@v3
