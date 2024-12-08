@@ -13,7 +13,7 @@ import { Github } from "lucide-react";
 
 export const SignIn = () => {
   const apiUrl =
-    import.meta.env.VITE_API_URL || 'http://localhost:3000'; 
+    import.meta.env.VITE_API_URL; 
 
   const handleSignIn = async (e: React.FormEvent) => {
     e.preventDefault()
