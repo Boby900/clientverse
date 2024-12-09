@@ -1,10 +1,11 @@
 import "./App.css";
-import SignIn from "./auth/SignIn";
+import SignUp from "./auth/SignUp";
 import Footer from "./layout/Footer";
 import Main from "./layout/Main";
 import Navbar from "./layout/Navbar";
 import Page2 from "./layout/Page2";
 import { Routes, Route } from "react-router";
+import Page from "./pages/dashboard/page";
 
 function App() {
   return (
@@ -23,10 +24,18 @@ function App() {
           }
         />
         <Route
-          path="/login"
+          path="/signup"
           element={
             <>
-              <SignIn />
+              <SignUp />
+            </>
+          }
+        />
+        <Route
+          path="/dashboard"
+          element={
+            <>
+              <Page />
             </>
           }
         />
