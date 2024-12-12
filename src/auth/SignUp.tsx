@@ -10,26 +10,35 @@ import {
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
 import { Github } from "lucide-react";
-
+import { useNavigate } from "react-router";
 export const SignIn = () => {
-  const apiUrl =
-    import.meta.env.VITE_API_URL; 
+  const apiUrl = import.meta.env.VITE_API_URL;
+  const navigate = useNavigate();
+  const handleSignIn = async (e: React.FormEvent<HTMLFormElement>) => {
+    e.preventDefault();
+    const formData = new FormData(e.currentTarget);
+    const data = {
+      email: formData.get("email"),
+      password: formData.get("password"),
+    };
+    try {
+      const response = await fetch(`${apiUrl}/api/auth/signup`, {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+        },
+        body: JSON.stringify(data),
+      });
 
-  const handleSignIn = async (e: React.FormEvent) => {
-    e.preventDefault()
-    const data = await fetch(apiUrl + '/api/', {
-      method: 'GET',
-      headers: {
-        'Content-Type': 'application/json',
-      },
-      
-    })
-    .then(response => response.json())
-    .then(data => console.log(data))
-    .catch(error => console.error('Error:', error));
-    
-    console.log(data)
-    console.log("form submitted");
+      const result = await response.json();
+      console.log(result)
+      if(response.ok){
+        navigate("/dashboard");
+      }
+ 
+    } catch (error) {
+      console.error("Error:", error);
+    }
   };
 
   return (
@@ -45,11 +54,11 @@ export const SignIn = () => {
           <form onSubmit={handleSignIn} className="space-y-4">
             <div className="space-y-2">
               <Label htmlFor="email">Email</Label>
-              <Input id="email" type="email" placeholder="m@example.com" />
+              <Input name="email" id="email" type="email" placeholder="m@example.com" />
             </div>
             <div className="space-y-2">
               <Label htmlFor="password">Password</Label>
-              <Input id="password" type="password" />
+              <Input name="password" id="password" type="password" />
             </div>
             <Button type="submit" className="w-full">
               Sign In with Email
