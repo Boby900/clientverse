@@ -5,7 +5,7 @@ import Main from "./layout/Main";
 import Navbar from "./layout/Navbar";
 import Page2 from "./layout/Page2";
 import { Routes, Route } from "react-router";
-import Page from "./pages/dashboard/page";
+import Page from "./pages/dashboard/Page";
 
 function App() {
   return (
