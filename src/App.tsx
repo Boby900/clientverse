@@ -6,6 +6,7 @@ import Navbar from "./layout/Navbar";
 import Page2 from "./layout/Page2";
 import { Routes, Route } from "react-router";
 import Page from "./pages/dashboard/Page";
+import Login from "./auth/Login";
 
 function App() {
   return (
@@ -28,6 +29,14 @@ function App() {
           element={
             <>
               <SignUp />
+            </>
+          }
+        />
+        <Route
+          path="/login"
+          element={
+            <>
+              <Login />
             </>
           }
         />
