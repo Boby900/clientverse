@@ -10,9 +10,15 @@ import {
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
 import { Github } from 'lucide-react';
+import { useState } from "react";
 import { useNavigate } from "react-router";
 import { Link } from "react-router";
 export const Login = () => {
+
+    const [error, setError] = useState("");
+
+
+
   const apiUrl = import.meta.env.VITE_API_URL;
   const navigate = useNavigate();
 
@@ -24,7 +30,7 @@ export const Login = () => {
       password: formData.get("password"),
     };
     try {
-      const response = await fetch(`${apiUrl}/api/auth/signup`, {
+      const response = await fetch(`${apiUrl}/api/auth/login`, {
         method: "POST",
         headers: {
           "Content-Type": "application/json",
@@ -33,12 +39,17 @@ export const Login = () => {
       });
 
       const result = await response.json();
-      console.log(result)
+      console.log(result.message)
       if(response.ok){
         navigate("/dashboard");
       }
+      else {
+        // Set error from server response or fallback message
+        setError(result.message);
+      }
     } catch (error) {
       console.error("Error:", error);
+
     }
   };
 
@@ -50,6 +61,7 @@ export const Login = () => {
           <CardDescription className="text-center">
             Enter your email below to login in your account
           </CardDescription>
+          {error && (<p className="text-sm text-red-500 text-center mt-2">{error}</p>)}
         </CardHeader>
         <CardContent>
           <form onSubmit={handleSignUp} className="space-y-4">

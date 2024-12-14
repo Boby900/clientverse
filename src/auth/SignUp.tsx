@@ -10,10 +10,13 @@ import {
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
 import { Github } from 'lucide-react';
+import { useState } from "react";
 import { useNavigate } from "react-router";
 import { Link } from "react-router";
 
 export const SignUp = () => {
+
+  const [error, setError] = useState("")
   const apiUrl = import.meta.env.VITE_API_URL;
   const navigate = useNavigate();
 
@@ -38,6 +41,9 @@ export const SignUp = () => {
       if(response.ok){
         navigate("/dashboard");
       }
+      else{
+        setError(result.message)
+      }
     } catch (error) {
       console.error("Error:", error);
     }
@@ -49,6 +55,7 @@ export const SignUp = () => {
         <CardHeader className="space-y-1">
           <CardTitle className="text-2xl font-bold text-center">Create an account</CardTitle>
           <CardDescription className="text-center">
+          {error && (<p className="text-sm text-red-500 text-center mt-2">{error}</p>)}
             Enter your email below to create your account
           </CardDescription>
         </CardHeader>
