@@ -39,7 +39,8 @@ export const Login = () => {
       });
 
       const result = await response.json();
-      console.log(result.message)
+      
+      console.log(result)
       if(response.ok){
         navigate("/dashboard");
       }
