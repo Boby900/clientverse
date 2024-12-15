@@ -30,6 +30,7 @@ export const SignUp = () => {
     try {
       const response = await fetch(`${apiUrl}/api/auth/signup`, {
         method: "POST",
+        credentials: 'include', // Ensures cookies are sent with the request
         headers: {
           "Content-Type": "application/json",
         },

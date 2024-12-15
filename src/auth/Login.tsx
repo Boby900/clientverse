@@ -32,6 +32,7 @@ export const Login = () => {
     try {
       const response = await fetch(`${apiUrl}/api/auth/login`, {
         method: "POST",
+        credentials: 'include', // Ensures cookies are sent with the request
         headers: {
           "Content-Type": "application/json",
         },
