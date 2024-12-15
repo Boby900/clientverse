@@ -1,8 +1,40 @@
 import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
 import { ChartSpline, Database, Squirrel, Wrench } from "lucide-react";
 import Sidebar2 from "./Sidebar2";
+import { useState } from "react";
+import { Button } from "@/components/ui/button";
+import { useNavigate } from "react-router";
 
 function Sidebar() {
+  const [dropDown, setDropDown] = useState(false);
+  const navigate = useNavigate();
+
+  const apiUrl = import.meta.env.VITE_API_URL;
+
+  function toggleDropDown() {
+    setDropDown(!dropDown);
+    console.log("working");
+  }
+  async function logout() {
+    try {
+      const response = await fetch(`${apiUrl}/api/auth/logout`, {
+        method: "POST",
+        credentials: 'include', // Ensures cookies are sent with the request
+        headers: {
+          "Content-Type": "application/json",
+        }
+      });
+
+      const result = await response.json();
+
+      console.log(result);
+      if (response.ok) {
+        navigate("/");
+      }
+    } catch (error) {
+      console.error("Error:", error);
+    }
+  }
   return (
     <div className="flex  border-4 m-4 p-4 ">
       {/* Sidebar */}
@@ -29,10 +61,18 @@ function Sidebar() {
             </span>
           </a>
           <a href="#profile" title="Profile" className="mt-[400px]">
-            <Avatar>
-              <AvatarImage src="https://github.com/shadcn.png" />
-              <AvatarFallback>CN</AvatarFallback>
-            </Avatar>
+            {dropDown && (
+              <Button onClick={logout} className="mb-2 p-2">
+                Sign Out
+              </Button>
+            )}
+
+            <button onClick={toggleDropDown}>
+              <Avatar>
+                <AvatarImage src="https://github.com/shadcn.png" />
+                <AvatarFallback>CN</AvatarFallback>
+              </Avatar>
+            </button>
           </a>
         </nav>
       </div>
