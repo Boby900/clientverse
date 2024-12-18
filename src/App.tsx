@@ -7,6 +7,7 @@ import Page2 from "./layout/Page2";
 import { Routes, Route } from "react-router";
 import Page from "./pages/dashboard/Page";
 import Login from "./auth/Login";
+import GitHubCallback from "./auth/GitHubCallback";
 
 function App() {
   return (
@@ -30,6 +31,14 @@ function App() {
             <>
               <SignUp />
             </>
+          }
+        />
+        <Route
+          path="/login/github/callback"
+          element={
+      
+          <GitHubCallback />
+       
           }
         />
         <Route

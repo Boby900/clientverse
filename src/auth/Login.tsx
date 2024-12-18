@@ -54,6 +54,7 @@ export const Login = () => {
 
     }
   };
+  const githubLoginUrl = `${apiUrl}/api/auth/github/login`;
 
   return (
     <div className="flex justify-center items-center min-h-screen bg-gray-500">
@@ -104,10 +105,12 @@ export const Login = () => {
           </div>
         </div>
         <CardFooter className="flex flex-col space-y-4 mt-6">
+          <a href={githubLoginUrl}>
           <Button variant="outline" className="w-full">
             <Github className="mr-2 h-4 w-4" />
             Log In with GitHub
           </Button>
+          </a>
           <div className="text-center text-sm">
             Don't have an account?{" "}
             <Link to="/signup">
