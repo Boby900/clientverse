@@ -16,7 +16,7 @@ export function DialogDemo() {
   return (
   <Dialog>
       <DialogTrigger asChild>
-        <Button variant="outline" className="text"><Plus size={36} />Make a new collection</Button>
+        <Plus size={36} />
       </DialogTrigger>
       <DialogContent className="sm:max-w-[425px]">
         <DialogHeader>

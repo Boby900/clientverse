@@ -40,8 +40,6 @@ function Sidebar() {
     switch (activeComponent) {
       case "home":
         return <h1><TableDemo /></h1>;
-      case "collections":
-        return <h1><DialogDemo /></h1>;
       case "logs":
         return <h1>Logs Component</h1>;
       case "settings":
@@ -83,6 +81,13 @@ function Sidebar() {
           >
             <span title="settings">
               <Wrench size={32} />
+            </span>
+          </button>
+          <button
+            className="p-2 rounded hover:bg-gray-700"
+          >
+            <span title="make a new collection">
+              <DialogDemo />
             </span>
           </button>
 
