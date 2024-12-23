@@ -15,6 +15,7 @@ import { Label } from "@/components/ui/label";
 import { Checkbox } from "@/components/ui/checkbox";
 import { Plus } from "lucide-react";
 import React, { useState } from "react";
+import { useToast } from "@/hooks/use-toast"
 
 const AVAILABLE_FIELDS = [
   { id: "created", label: "Created" },
@@ -28,6 +29,7 @@ export function DialogDemo() {
   const [name, setName] = useState(""); // State for name
   const [selectedFields, setSelectedFields] = useState<string[]>([]);
   const [isDialogOpen, setIsDialogOpen] = useState(false); // State to control dialog visibility
+  const { toast } = useToast()
 
 
   const handleNameChange = (e: React.ChangeEvent<HTMLInputElement>) => {
@@ -64,6 +66,10 @@ export function DialogDemo() {
         setName("");
         setSelectedFields([]);
         setIsDialogOpen(false)
+        toast({
+          title: "collection created successfully.",
+          variant: "default"
+        })
       } else {
         console.error(data.error); // Error message
       }

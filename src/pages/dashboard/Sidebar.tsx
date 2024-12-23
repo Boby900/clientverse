@@ -8,8 +8,9 @@ import {
   DropdownMenuItem,
   DropdownMenuTrigger,
 } from "@/components/ui/dropdown-menu";
-import { DialogDemo } from "./Collection";
+import { DialogDemo } from "./NewCollection";
 import { TableDemo } from "./Home";
+import AllCollection from "./AllCollection";
 
 function Sidebar() {
   const navigate = useNavigate();
@@ -39,11 +40,13 @@ function Sidebar() {
   const renderContent = () => {
     switch (activeComponent) {
       case "home":
-        return <h1><TableDemo /></h1>;
+        return <TableDemo />;
       case "logs":
         return <h1>Logs Component</h1>;
       case "settings":
         return <h1>Settings Component</h1>;
+      case "collections":
+        return <div><AllCollection /></div>;
     }
   };
   return (
