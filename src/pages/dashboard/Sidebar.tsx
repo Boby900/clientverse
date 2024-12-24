@@ -8,8 +8,9 @@ import {
   DropdownMenuItem,
   DropdownMenuTrigger,
 } from "@/components/ui/dropdown-menu";
-import { DialogDemo } from "./Collection";
+import { DialogDemo } from "./NewCollection";
 import { TableDemo } from "./Home";
+import AllCollection from "./AllCollection";
 
 function Sidebar() {
   const navigate = useNavigate();
@@ -39,24 +40,26 @@ function Sidebar() {
   const renderContent = () => {
     switch (activeComponent) {
       case "home":
-        return <h1><TableDemo /></h1>;
+        return <TableDemo />;
       case "logs":
         return <h1>Logs Component</h1>;
       case "settings":
         return <h1>Settings Component</h1>;
+      case "collections":
+        return <div><AllCollection /></div>;
     }
   };
   return (
     <div className="flex  border-4 m-4 p-4 ">
       {/* Sidebar */}
-      <div className="sm:w-24 w-34  bg-gray-800 text-white flex flex-col">
+      <div className="sm:w-24 w-34  bg-gray-950 text-white flex flex-col">
         <nav className="flex  flex-col  gap-2 p-4">
           <button
             onClick={() => setActiveComponent("home")}
             className="p-2 rounded hover:bg-gray-700"
           >
             <span title="Home">
-              <Squirrel size={32} />
+              <Squirrel  size={32} />
             </span>
           </button>
           <button
@@ -64,7 +67,7 @@ function Sidebar() {
             className="p-2 rounded hover:bg-gray-700"
           >
             <span title="collections">
-              <Database size={32} />
+              <Database  size={32} />
             </span>
           </button>
           <button
@@ -72,7 +75,7 @@ function Sidebar() {
             className="p-2 rounded hover:bg-gray-700"
           >
             <span title="logs">
-              <ChartSpline size={32} />
+              <ChartSpline  size={32} />
             </span>
           </button>
           <button
@@ -80,7 +83,7 @@ function Sidebar() {
             className="p-2 rounded hover:bg-gray-700"
           >
             <span title="settings">
-              <Wrench size={32} />
+              <Wrench  size={32} />
             </span>
           </button>
           <button

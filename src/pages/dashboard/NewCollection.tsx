@@ -15,10 +15,10 @@ import { Label } from "@/components/ui/label";
 import { Checkbox } from "@/components/ui/checkbox";
 import { Plus } from "lucide-react";
 import React, { useState } from "react";
+import { useToast } from "@/hooks/use-toast"
 
 const AVAILABLE_FIELDS = [
   { id: "created", label: "Created" },
-  { id: "userId", label: "UserId" },
   { id: "description", label: "Description" },
   { id: "author", label: "Author" },
   { id: "category", label: "Category" },
@@ -28,6 +28,7 @@ export function DialogDemo() {
   const [name, setName] = useState(""); // State for name
   const [selectedFields, setSelectedFields] = useState<string[]>([]);
   const [isDialogOpen, setIsDialogOpen] = useState(false); // State to control dialog visibility
+  const { toast } = useToast()
 
 
   const handleNameChange = (e: React.ChangeEvent<HTMLInputElement>) => {
@@ -44,7 +45,7 @@ export function DialogDemo() {
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
   
-    const payload = { name, fields: selectedFields };
+    const payload = { name, fields: selectedFields};
   
     try {
       const apiUrl = import.meta.env.VITE_API_URL;
@@ -54,6 +55,7 @@ export function DialogDemo() {
           "Content-Type": "application/json",
         },
         body: JSON.stringify(payload),
+        credentials: 'include'
       });
   
       const data = await response.json();
@@ -64,6 +66,10 @@ export function DialogDemo() {
         setName("");
         setSelectedFields([]);
         setIsDialogOpen(false)
+        toast({
+          title: "collection created successfully.",
+          variant: "default"
+        })
       } else {
         console.error(data.error); // Error message
       }
@@ -75,7 +81,7 @@ export function DialogDemo() {
   return (
       <Dialog open={isDialogOpen} onOpenChange={setIsDialogOpen}>
         <DialogTrigger asChild>
-          <Plus size={36} />
+          <Plus  size={36} />
         </DialogTrigger>
         <DialogContent className="sm:max-w-[425px]">
         <form onSubmit={handleSubmit}>

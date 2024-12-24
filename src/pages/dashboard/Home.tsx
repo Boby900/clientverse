@@ -3,7 +3,7 @@ import {
   TableBody,
   TableCaption,
   TableCell,
-  TableFooter,
+  
   TableHead,
   TableHeader,
   TableRow,
@@ -50,7 +50,7 @@ try{
   }, []); // Empty dependency array ensures this runs only once
 
   return (
-    <div className="border-white border-2">
+    <div className="">
       {loading?(<SkeletonCard />):(<Table>
         <TableCaption>A list of recent users.</TableCaption>
         <TableHeader>
@@ -73,12 +73,12 @@ try{
             </TableRow>
           ))}
         </TableBody>
-        <TableFooter>
+        {/* <TableFooter>
           <TableRow>
             <TableCell colSpan={3}>Total</TableCell>
             <TableCell className="text-right">$2,500.00</TableCell>
           </TableRow>
-        </TableFooter>
+        </TableFooter> */}
 
       </Table>)}
     </div>
