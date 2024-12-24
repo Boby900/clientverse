@@ -19,7 +19,6 @@ import { useToast } from "@/hooks/use-toast"
 
 const AVAILABLE_FIELDS = [
   { id: "created", label: "Created" },
-  { id: "userId", label: "UserId" },
   { id: "description", label: "Description" },
   { id: "author", label: "Author" },
   { id: "category", label: "Category" },
@@ -46,7 +45,7 @@ export function DialogDemo() {
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
   
-    const payload = { name, fields: selectedFields };
+    const payload = { name, fields: selectedFields};
   
     try {
       const apiUrl = import.meta.env.VITE_API_URL;
@@ -56,6 +55,7 @@ export function DialogDemo() {
           "Content-Type": "application/json",
         },
         body: JSON.stringify(payload),
+        credentials: 'include'
       });
   
       const data = await response.json();
@@ -81,7 +81,7 @@ export function DialogDemo() {
   return (
       <Dialog open={isDialogOpen} onOpenChange={setIsDialogOpen}>
         <DialogTrigger asChild>
-          <Plus size={36} />
+          <Plus  size={36} />
         </DialogTrigger>
         <DialogContent className="sm:max-w-[425px]">
         <form onSubmit={handleSubmit}>
