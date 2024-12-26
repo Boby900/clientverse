@@ -11,8 +11,10 @@ import {
 import { DialogDemo } from "./NewCollection";
 import { TableDemo } from "./Home";
 import AllCollection from "./AllCollection";
-
-function Sidebar() {
+interface SidebarProps {
+  githubAvatar: string | null;
+}
+function Sidebar(props: SidebarProps) {
   const navigate = useNavigate();
   const [activeComponent, setActiveComponent] = useState("home");
   const apiUrl = import.meta.env.VITE_API_URL;
@@ -27,9 +29,7 @@ function Sidebar() {
         },
       });
 
-      const result = await response.json();
 
-      console.log(result);
       if (response.ok) {
         navigate("/");
       }
@@ -98,7 +98,10 @@ function Sidebar() {
             <DropdownMenu>
               <DropdownMenuTrigger>
                 <Avatar>
-                  <AvatarImage src="https://github.com/shadcn.png" />
+                <AvatarImage 
+                    src={props.githubAvatar ? props.githubAvatar : "https://github.com/shadcn.png"} 
+                    alt="User Avatar" 
+                  />
                   <AvatarFallback>CN</AvatarFallback>
                 </Avatar>
               </DropdownMenuTrigger>
