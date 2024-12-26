@@ -37,7 +37,6 @@ try{
       });
 
       const result = await response.json();
-      console.log(result);
       setUserData(result.data);
 } catch(error){
   console.error(error)

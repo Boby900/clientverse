@@ -1,7 +1,10 @@
 import Sidebar from "./Sidebar";
-
+import { useSearchParams } from "react-router";
 
 function Page() {
+  const [params] = useSearchParams()
+  const github_avatar = params.get('github_avatar');
+  
   return (
     <div>
  
@@ -9,7 +12,7 @@ function Page() {
         This is a demo of Clientverse admin dashboard. The database resets every
         hour. Realtime data and file upload are disabled.
       </div>
-     <Sidebar />
+     <Sidebar githubAvatar={github_avatar} />
   
      
     </div>
