@@ -14,7 +14,9 @@ function Page() {
       </div>
      <Sidebar githubAvatar={github_avatar} />
   
-     
+     <div className="pb-2 mb-2">
+
+     </div>
     </div>
   );
 }

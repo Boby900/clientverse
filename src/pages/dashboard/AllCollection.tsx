@@ -11,12 +11,20 @@ import {
 import { Button } from "@/components/ui/button";
 import { Flame } from "lucide-react";
 import { useEffect, useState } from "react";
+// import { PaginationDemo } from "./pagination";
 
 interface CollectionData {
   id: number;
   createdAt: Date | null;
   tableName: string;
   userId: number;
+}
+
+interface PaginationData {
+  page: number; // Current page
+  limit: number; // Number of items per page
+  total: number; // Total number of collections
+  totalPages: number; // Total number of pages
 }
 
 function AllCollection() {
@@ -28,14 +36,18 @@ function AllCollection() {
   });
 
   const [data, setData] = useState<CollectionData[]>([]);
+  const [loading, setLoading] = useState(true); // Track loading state
+  const [pagination, setPagination] = useState<PaginationData | null>(null);
+  const [currentPage, setCurrentPage] = useState(1);
 
   // Fetch data when the component mounts
-  useEffect(() => {
-    const fetchData = async () => {
+  
+    const fetchData = async (page: number) => {
+      setLoading(true); // Start loading state
       try {
         const apiUrl = import.meta.env.VITE_API_URL;
         const response = await fetch(
-          `${apiUrl}/api/collection/get_collections`,
+          `${apiUrl}/api/collection/get_collections?page=${page}`,
           {
             method: "GET",
             headers: {
@@ -47,8 +59,9 @@ function AllCollection() {
         if (response.ok) {
           const result = await response.json();
           console.log(result)
-          if (result?.collections) {
+          if (result?.collections && result?.pagination) {
             setData(result.collections); // Set the fetched collections array
+            setPagination(result.pagination); // Update state with pagination metadata
 
           } else {
             console.error("Unexpected data format:", result);
@@ -59,15 +72,31 @@ function AllCollection() {
       } catch (error) {
         console.error("Error fetching data:", error);
       }
+      finally {
+        setLoading(false); // Mark loading as complete
+      }
     };
 
-    fetchData();
-  }, []); // Empty dependency array ensures this runs once on component mount
+  
+    // Fetch data whenever the component mounts or `currentPage` changes
+    useEffect(() => {
+      fetchData(currentPage); // Fetch data for the current page
+    }, [currentPage]);
 
+    const handlePrevious = () => {
+      if (currentPage > 1) setCurrentPage((prev) => prev - 1);
+    };
+
+    const handleNext = () => {
+      if (pagination && currentPage < pagination.totalPages)
+        setCurrentPage((prev) => prev + 1);
+    };
   return (
     <div className="grid sm:grid-cols-2 gap-6 p-6  rounded-lg">
      
-      {data.length > 0?( data.map((card, index) => (
+      {loading ? (
+        <p>Loading collections...</p>
+      ): data.length > 0?( data.map((card, index) => (
         <div key={index}>
           <motion.div
             style={{
@@ -99,8 +128,32 @@ function AllCollection() {
             </CardFooter>
           </Card>
           </div>
-      ))):<p>Loading collections...</p>
+      ))):<p>No collections found.</p>
      }
+{!loading && pagination && pagination.totalPages > 1 && (
+        <div className="mt-8 flex justify-center items-center space-x-4">
+        {/* "Previous" button */}
+        <Button
+          onClick={handlePrevious}
+          disabled={currentPage === 1} // Disable if on the first page
+          variant="outline"
+        >
+          Previous
+        </Button>
+        {/* Current page display */}
+        <span className="text-sm">
+          Page {currentPage} of {pagination.totalPages}
+        </span>
+        {/* "Next" button */}
+        <Button
+          onClick={handleNext}
+          disabled={currentPage === pagination.totalPages} // Disable if on the last page
+          variant="outline"
+        >
+          Next
+        </Button>
+      </div>
+      )}
     </div>
   );
 }
