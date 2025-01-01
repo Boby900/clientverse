@@ -16,7 +16,7 @@ import { Checkbox } from "@/components/ui/checkbox";
 import { Plus } from "lucide-react";
 import React, { useState } from "react";
 import { useToast } from "@/hooks/use-toast"
-
+import { useFetchCollections } from "@/lib/utils";
 const AVAILABLE_FIELDS = [
   { id: "created", label: "Created" },
   { id: "description", label: "Description" },
@@ -29,7 +29,7 @@ export function DialogDemo() {
   const [selectedFields, setSelectedFields] = useState<string[]>([]);
   const [isDialogOpen, setIsDialogOpen] = useState(false); // State to control dialog visibility
   const { toast } = useToast()
-
+  const {fetchData, currentPage} = useFetchCollections();
 
   const handleNameChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     setName(e.target.value);
@@ -63,6 +63,9 @@ export function DialogDemo() {
       if (response.ok) {
         console.log(data.message); // Success message
         // Optionally, clear the form or show a success notification
+        console.log(currentPage)
+        await fetchData(currentPage);
+
         setName("");
         setSelectedFields([]);
         setIsDialogOpen(false)
