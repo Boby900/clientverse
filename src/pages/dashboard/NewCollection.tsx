@@ -16,7 +16,6 @@ import { Checkbox } from "@/components/ui/checkbox";
 import { Plus } from "lucide-react";
 import React, { useState } from "react";
 import { useToast } from "@/hooks/use-toast"
-
 const AVAILABLE_FIELDS = [
   { id: "created", label: "Created" },
   { id: "description", label: "Description" },
