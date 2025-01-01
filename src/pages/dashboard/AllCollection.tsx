@@ -10,22 +10,8 @@ import {
 } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
 import { Flame } from "lucide-react";
-import { useEffect, useState } from "react";
 // import { PaginationDemo } from "./pagination";
-
-interface CollectionData {
-  id: number;
-  createdAt: Date | null;
-  tableName: string;
-  userId: number;
-}
-
-interface PaginationData {
-  page: number; // Current page
-  limit: number; // Number of items per page
-  total: number; // Total number of collections
-  totalPages: number; // Total number of pages
-}
+import { useFetchCollections } from "@/lib/utils";
 
 function AllCollection() {
   const { scrollYProgress } = useScroll();
@@ -35,85 +21,18 @@ function AllCollection() {
     restDelta: 0.001,
   });
 
-  const [data, setData] = useState<CollectionData[]>([]);
-  const [loading, setLoading] = useState(true); // Track loading state
-  const [pagination, setPagination] = useState<PaginationData | null>(null);
-  const [currentPage, setCurrentPage] = useState(1);
+  const {
+    data,
+    loading,
+    pagination,
+    currentPage,
+    handlePrevious,
+    handleNext,
+    handleDelete,
+  } = useFetchCollections();
 
-  // Fetch data when the component mounts
-
-  const fetchData = async (page: number) => {
-    setLoading(true); // Start loading state
-    try {
-      const apiUrl = import.meta.env.VITE_API_URL;
-      const response = await fetch(
-        `${apiUrl}/api/collection/get_collections?page=${page}`,
-        {
-          method: "GET",
-          headers: {
-            "Content-Type": "application/json",
-          },
-          credentials: "include",
-        }
-      ); // Replace with the correct API endpoint
-      if (response.ok) {
-        const result = await response.json();
-        console.log(result);
-        if (result?.collections && result?.pagination) {
-          setData(result.collections); // Set the fetched collections array
-          setPagination(result.pagination); // Update state with pagination metadata
-        } else {
-          console.error("Unexpected data format:", result);
-        }
-      } else {
-        console.error("Failed to fetch data");
-      }
-    } catch (error) {
-      console.error("Error fetching data:", error);
-    } finally {
-      setLoading(false); // Mark loading as complete
-    }
-  };
-
-  // Fetch data whenever the component mounts or `currentPage` changes
-  useEffect(() => {
-    fetchData(currentPage); // Fetch data for the current page
-  }, [currentPage]);
-
-  const handlePrevious = () => {
-    if (currentPage > 1) setCurrentPage((prev) => prev - 1);
-  };
-
-  const handleNext = () => {
-    if (pagination && currentPage < pagination.totalPages)
-      setCurrentPage((prev) => prev + 1);
-  };
   const handleVisit = () => {
     console.log("hurray");
-  };
-
-  const handleDelete = async (id: number) => {
-    try {
-      const apiUrl = import.meta.env.VITE_API_URL;
-      const response = await fetch(
-        `${apiUrl}/api/collection/del_collections/${id}`,
-        {
-          method: "DELETE",
-          headers: {
-            "Content-Type": "application/json",
-          },
-          credentials: "include",
-        }
-      ); // Replace with the correct API endpoint
-      if (response.ok) {
-        console.log("Collection deleted successfully");
-        await fetchData(currentPage); // Refetch data for the current page
-      } else {
-        console.error("Failed to delete collection");
-      }
-    } catch (error) {
-      console.error("Error deleting collection:", error);
-    }
   };
 
   return (
