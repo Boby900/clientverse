@@ -1,4 +1,5 @@
 import { Button } from "@/components/ui/button";
+import { z, ZodError } from "zod";
 import {
   Card,
   CardContent,
@@ -13,6 +14,11 @@ import { Github, Mail } from 'lucide-react';
 import { useState } from "react";
 import { useNavigate } from "react-router";
 import { Link } from "react-router";
+
+const signupSchema = z.object({
+  email: z.string().email('Invalid email address').min(5, 'Email must be at least 5 characters'),
+  password: z.string().min(5, 'Password must be at least 5 characters'),
+});
 
 export const SignUp = () => {
   const [error, setError] = useState("")
@@ -29,13 +35,14 @@ export const SignUp = () => {
       password: formData.get("password"),
     };
     try {
+        const validatedData = signupSchema.parse(data)
       const response = await fetch(`${apiUrl}/api/auth/signup`, {
         method: "POST",
         credentials: 'include', // Ensures cookies are sent with the request
         headers: {
           "Content-Type": "application/json",
         },
-        body: JSON.stringify(data),
+        body: JSON.stringify(validatedData),
       });
 
       const result = await response.json();
@@ -46,8 +53,18 @@ export const SignUp = () => {
       else{
         setError(result.message)
       }
-    } catch (error) {
-      console.error("Error:", error);
+    }catch (error) {
+      // Handle Zod validation errors
+      if (error instanceof ZodError) {
+        // Format the validation errors nicely
+        const errorMessages = error.errors.map(err => 
+          `${err.path.join('.')}: ${err.message}`
+        ).join(', ');
+        setError(errorMessages);
+      } else {
+        console.error("Error:", error);
+        setError("An unexpected error occurred");
+      }
     }
   };
 
