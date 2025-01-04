@@ -30,7 +30,7 @@ function Navbar() {
           </li>
           <li className="hidden lg:block">FAQ</li>
           <li className="hidden lg:block">
-            <a href="#">
+            <a target="_blank" href="https://github.com/Boby900/clientverse">
               <Github />
             </a>
           </li>
@@ -54,7 +54,13 @@ function Navbar() {
                     <span>Documentation</span>
                   </DropdownMenuItem>
                   <DropdownMenuItem>
-                    <span>Discussions</span>
+                    <span>
+                      {" "}
+                      <a target="_blank" href="https://github.com/Boby900/clientverse">
+                        <Github />
+                      </a>
+                    
+                    </span>
                   </DropdownMenuItem>
                 </DropdownMenuContent>
               </DropdownMenu>
