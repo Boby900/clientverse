@@ -7,3 +7,4 @@
 10. shift to cloudfare, gcp or AWS.
 11. add admin dashboard
 12. add password recovery for the email auth.
+13. add pinata's file storage under the file section.

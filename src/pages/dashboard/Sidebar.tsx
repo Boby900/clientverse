@@ -1,5 +1,5 @@
 import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
-import { ChartSpline, Database, Squirrel, Wrench } from "lucide-react";
+import { ChartSpline, Database, File, Squirrel} from "lucide-react";
 import { useState } from "react";
 import { useNavigate } from "react-router";
 import {
@@ -83,7 +83,7 @@ function Sidebar(props: SidebarProps) {
             className="p-2 rounded hover:bg-gray-700"
           >
             <span title="settings">
-              <Wrench  size={32} />
+            <File size={32} />
             </span>
           </button>
           <button

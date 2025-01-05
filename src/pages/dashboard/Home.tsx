@@ -54,7 +54,7 @@ try{
         <TableCaption>A list of recent users.</TableCaption>
         <TableHeader>
           <TableRow>
-            <TableHead className="w-[100px]">ID</TableHead>
+            <TableHead>ID</TableHead>
             <TableHead>Email</TableHead>
             <TableHead>Created At</TableHead>
             <TableHead>GitHub ID</TableHead>
