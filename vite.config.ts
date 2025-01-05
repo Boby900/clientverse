@@ -6,7 +6,9 @@ import path from "path";
 // https://vite.dev/config/
 export default defineConfig({
   test: {
-    // ... Specify options here.
+    globals:true,
+    setupFiles: './vitest.setup.ts',
+    environment: 'jsdom',
   },
   plugins: [react()],
  

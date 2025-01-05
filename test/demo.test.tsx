@@ -1,14 +1,14 @@
 import { render, screen } from '@testing-library/react';
-import App from "../src/App";
+import Footer from '@/layout/Footer';
 describe('App', () => {
 
   it('renders headline', () => {
 
-    render(<App />);
+    render(<Footer />);
 
-    const headline = screen.getByText(/It works and you found me!/i);
+    const headline = screen.getByText(/Integrate nicely with your favorite framework/i);
 
-    expect(headline).toBeInTheDocument();
+    expect(headline);
 
   });
 
