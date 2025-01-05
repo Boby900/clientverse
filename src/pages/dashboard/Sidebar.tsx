@@ -11,6 +11,7 @@ import {
 import { DialogDemo } from "./NewCollection";
 import { TableDemo } from "./Home";
 import AllCollection from "./AllCollection";
+import Pinata from "./uploadPinata";
 interface SidebarProps {
   githubAvatar: string | null;
 }
@@ -44,7 +45,7 @@ function Sidebar(props: SidebarProps) {
       case "logs":
         return <h1>Logs Component</h1>;
       case "settings":
-        return <h1>Settings Component</h1>;
+        return <div><Pinata /></div>;
       case "collections":
         return <div><AllCollection /></div>;
     }
