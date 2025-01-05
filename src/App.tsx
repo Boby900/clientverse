@@ -7,6 +7,7 @@ import Page2 from "./layout/Page2";
 import { Routes, Route } from "react-router";
 import Page from "./pages/dashboard/Page";
 import Login from "./auth/Login";
+import ErrorPage from "./components/ui/error";
 
 function App() {
   return (
@@ -24,6 +25,9 @@ function App() {
             </>
           }
         />
+        {/* Catch-all route for undefined paths */}
+        <Route path="*" element={<ErrorPage />} />
+
         <Route
           path="/signup"
           element={
