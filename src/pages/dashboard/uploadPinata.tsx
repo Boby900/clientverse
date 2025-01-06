@@ -5,8 +5,11 @@ import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { LoaderCircle } from "lucide-react";
+import { useToast } from "@/hooks/use-toast";
 
 function Pinata() {
+  const { toast } = useToast()
+
   const [selectedFile, setSelectedFile] = useState<File | null>(null);
   const [loading, setLoading] = useState(false);
   const fileInputRef = useRef<HTMLInputElement | null>(null);
@@ -17,14 +20,25 @@ function Pinata() {
   };
 
   const handleSubmission = async () => {
-    if (!selectedFile) {
-      console.log("No file selected");
-      return;
+  
+      if (!selectedFile) {
+        toast({
+          title: "No file selected",
+          description: "Please select a file to upload.",
+          variant: "destructive",
+        });
+        return;
     }
     setLoading(true); // Start spinner
     try {
       const upload = await pinata.upload.file(selectedFile);
+      
       console.log(upload);
+      toast({
+        title: "Upload Successful",
+        description: `Your file "${selectedFile.name}" was uploaded successfully.`,
+        variant: "default",
+      });
     } catch (error) {
       console.log(error);
     } finally {
