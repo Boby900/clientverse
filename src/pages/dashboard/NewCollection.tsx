@@ -17,6 +17,8 @@ import { Plus } from "lucide-react";
 import React, { useState } from "react";
 import { useToast } from "@/hooks/use-toast"
 import { useFetchCollections } from "@/lib/utils";
+import { LoaderCircle } from "lucide-react";
+
 const AVAILABLE_FIELDS = [
   { id: "created", label: "Created" },
   { id: "description", label: "Description" },
@@ -27,6 +29,7 @@ const AVAILABLE_FIELDS = [
 export function DialogDemo() {
   const [name, setName] = useState(""); // State for name
   const [selectedFields, setSelectedFields] = useState<string[]>([]);
+  const [loading, setLoading] = useState(false);
   const [isDialogOpen, setIsDialogOpen] = useState(false); // State to control dialog visibility
   const { toast } = useToast()
   const {fetchData, currentPage} = useFetchCollections();
@@ -46,7 +49,7 @@ export function DialogDemo() {
     e.preventDefault();
   
     const payload = { name, fields: selectedFields};
-  
+    setLoading(true); // Start spinner
     try {
       const apiUrl = import.meta.env.VITE_API_URL;
       const response = await fetch(`${apiUrl}/api/collection`, {
@@ -78,6 +81,9 @@ export function DialogDemo() {
       }
     } catch (error) {
       console.error("Error submitting form:", error);
+    }
+    finally{
+      setLoading(false); // Stop spinner
     }
   };
   
@@ -126,7 +132,12 @@ export function DialogDemo() {
           </div>
           <DialogFooter>
             <Button type="submit">
-              Submit
+            {loading ? (
+            <LoaderCircle className="animate-spin w-5 h-5" />
+          ) : (
+            // Spinner Icon
+            "Submit" // Default text
+          )}
             </Button>
           </DialogFooter>
           </form>
