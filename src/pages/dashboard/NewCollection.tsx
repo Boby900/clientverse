@@ -18,6 +18,7 @@ import React, { useState } from "react";
 import { useToast } from "@/hooks/use-toast"
 import { useFetchCollections } from "@/lib/utils";
 import { LoaderCircle } from "lucide-react";
+import { useBadge } from "@/hooks/badgeContext";
 
 const AVAILABLE_FIELDS = [
   { id: "created", label: "Created" },
@@ -28,6 +29,8 @@ const AVAILABLE_FIELDS = [
 
 export function DialogDemo() {
   const [name, setName] = useState(""); // State for name
+  const { setNew } = useBadge();  // Get the `setNew` function from context
+
   const [selectedFields, setSelectedFields] = useState<string[]>([]);
   const [loading, setLoading] = useState(false);
   const [isDialogOpen, setIsDialogOpen] = useState(false); // State to control dialog visibility
@@ -68,7 +71,7 @@ export function DialogDemo() {
         // Optionally, clear the form or show a success notification
         console.log(currentPage)
         await fetchData(currentPage);
-
+        setNew(); // This triggers the "New" state to be shown
         setName("");
         setSelectedFields([]);
         setIsDialogOpen(false)
