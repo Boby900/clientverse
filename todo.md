@@ -5,5 +5,4 @@
 9. some eslint rules.
 10. shift to cloudfare, gcp or AWS.
 12. add password recovery for the email auth.
-14. add a new badge to the collections icon every time there is a new entry in the a new table added.
 15. fix the cors error in the prod when uploading files to pinata.
