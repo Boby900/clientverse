@@ -4,11 +4,15 @@ import './index.css'
 import { BrowserRouter } from "react-router";
 import App from './App.tsx'
 import { Toaster } from "@/components/ui/toaster"
-
+import { BadgeProvider } from './hooks/badgeContext.tsx';
 createRoot(document.getElementById('root')!).render(
   <StrictMode>
     <BrowserRouter>
+    <BadgeProvider>
+
     <App />
+    </BadgeProvider>
+
     <Toaster />
     </BrowserRouter>
 
