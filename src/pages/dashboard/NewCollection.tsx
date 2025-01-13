@@ -19,6 +19,7 @@ import { useToast } from "@/hooks/use-toast"
 import { useFetchCollections } from "@/lib/utils";
 import { LoaderCircle } from "lucide-react";
 import { useBadge } from "@/hooks/badgeContext";
+import { z, ZodError} from "zod";
 
 const AVAILABLE_FIELDS = [
   { id: "created", label: "Created" },
@@ -27,19 +28,27 @@ const AVAILABLE_FIELDS = [
   { id: "category", label: "Category" },
 ];
 
+const FormSchema = z.object({
+  name: z.string().min(3, { message: "Must be 3 or more characters long" }),
+  fields: z.array(z.string()).min(1, { message: "At least one field must be selected" })
+});
+
 export function DialogDemo() {
   const [name, setName] = useState(""); // State for name
-  const { setNew } = useBadge();  // Get the `setNew` function from context
-
+  const [validationError, setValidationError] = useState<string | null>(null); // State for validation error
   const [selectedFields, setSelectedFields] = useState<string[]>([]);
   const [loading, setLoading] = useState(false);
   const [isDialogOpen, setIsDialogOpen] = useState(false); // State to control dialog visibility
+  
   const { toast } = useToast()
+  const { setNew } = useBadge();  // Get the `setNew` function from context
+
   const {fetchData, currentPage} = useFetchCollections();
 
   const handleNameChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     setName(e.target.value);
     console.log(e.target.value);
+    setValidationError(null); // Clear validation error as the user types
   };
   const handleCheckboxes = (fieldId: string) => {
     setSelectedFields((prev) =>
@@ -54,13 +63,15 @@ export function DialogDemo() {
     const payload = { name, fields: selectedFields};
     setLoading(true); // Start spinner
     try {
+      const validatedData = FormSchema.parse(payload);
+
       const apiUrl = import.meta.env.VITE_API_URL;
       const response = await fetch(`${apiUrl}/api/collection`, {
         method: "POST",
         headers: {
           "Content-Type": "application/json",
         },
-        body: JSON.stringify(payload),
+        body: JSON.stringify(validatedData),
         credentials: 'include'
       });
   
@@ -83,7 +94,12 @@ export function DialogDemo() {
         console.error(data.error); // Error message
       }
     } catch (error) {
-      console.error("Error submitting form:", error);
+      if (error instanceof ZodError) {
+        setValidationError(error.errors[0]?.message || "Invalid input");
+      } else {
+        console.error("Unexpected error:", error);
+      }
+      setLoading(false);
     }
     finally{
       setLoading(false); // Stop spinner
@@ -104,6 +120,9 @@ export function DialogDemo() {
               Make a new collection here. Select optional fields as needed. Hit
               submit when you're done.
             </DialogDescription>
+            {validationError && (
+              <p className="text-red-500 text-sm col-span-4">{validationError}</p>
+            )}
           </DialogHeader>
           <div className="grid gap-4 py-4">
             <div className="grid grid-cols-4 items-center gap-4">
