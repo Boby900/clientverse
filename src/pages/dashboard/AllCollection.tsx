@@ -29,6 +29,7 @@ function AllCollection() {
     handlePrevious,
     handleNext,
     handleDelete,
+    handlePageChange,
   } = useFetchCollections();
 
   const handleVisit = () => {
@@ -91,7 +92,7 @@ function AllCollection() {
         <p>No collections found.</p>
       )}
       {!loading && pagination && pagination.totalPages > 1 && (
-        <div className="mt-8 flex justify-center items-center space-x-4">
+        <div className="mt-8 flex gap-1 items-center space-x-4">
           {/* "Previous" button */}
           <Button
             onClick={handlePrevious}
@@ -104,6 +105,70 @@ function AllCollection() {
           <span className="text-sm">
             Page {currentPage} of {pagination.totalPages}
           </span>
+
+          {/* Numbered pagination */}
+          <div className="flex space-x-2">
+            {pagination.totalPages > 5 ? (
+              <>
+                {/* Always show the first two pages */}
+                <Button
+                  key={1}
+                  onClick={() => handlePageChange(1)}
+                  variant={currentPage === 1 ? "default" : "outline"}
+                >
+                  1
+                </Button>
+                <Button
+                  key={2}
+                  onClick={() => handlePageChange(2)}
+                  variant={currentPage === 2 ? "default" : "outline"}
+                >
+                  2
+                </Button>
+
+                {/* Add "..." if currentPage is far from the beginning */}
+                {currentPage > 4 && <span>...</span>}
+
+                {/* Show the current page if it's between the first and last two */}
+                {currentPage > 2 && currentPage < pagination.totalPages - 1 && (
+                  <Button
+                    key={currentPage}
+                    onClick={() => handlePageChange(currentPage)}
+                    variant="default"
+                  >
+                    {currentPage}
+                  </Button>
+                )}
+
+                {/* Add "..." if currentPage is far from the end */}
+                {currentPage < pagination.totalPages - 3 && <span>...</span>}
+
+                {/* Always show the last two pages */}
+                <Button
+                  key={pagination.totalPages}
+                  onClick={() => handlePageChange(pagination.totalPages)}
+                  variant={
+                    currentPage === pagination.totalPages
+                      ? "default"
+                      : "outline"
+                  }
+                >
+                  {pagination.totalPages}
+                </Button>
+              </>
+            ) : (
+              // Render all pages if totalPages <= 5
+              Array.from({ length: pagination.totalPages }, (_, index) => (
+                <Button
+                  key={index + 1}
+                  onClick={() => handlePageChange(index + 1)}
+                  variant={currentPage === index + 1 ? "default" : "outline"}
+                >
+                  {index + 1}
+                </Button>
+              ))
+            )}
+          </div>
           {/* "Next" button */}
           <Button
             onClick={handleNext}
