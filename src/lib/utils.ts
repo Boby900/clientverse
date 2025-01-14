@@ -1,6 +1,6 @@
-import { clsx, type ClassValue } from "clsx"
-import { twMerge } from "tailwind-merge"
-import { useState, useEffect } from "react";
+import { clsx, type ClassValue } from "clsx";
+import { twMerge } from "tailwind-merge";
+import { useState, useEffect, useRef } from "react";
 
 interface CollectionData {
   id: number;
@@ -15,10 +15,15 @@ interface PaginationData {
   total: number; // Total number of collections
   totalPages: number; // Total number of pages
 }
-export function cn(...inputs: ClassValue[]) {
-  return twMerge(clsx(inputs))
+
+interface CacheData {
+  data: CollectionData[];
+  pagination: PaginationData;
 }
 
+export function cn(...inputs: ClassValue[]) {
+  return twMerge(clsx(inputs));
+}
 
 export const useFetchCollections = () => {
   const [data, setData] = useState<CollectionData[]>([]);
@@ -26,8 +31,22 @@ export const useFetchCollections = () => {
   const [pagination, setPagination] = useState<PaginationData | null>(null);
   const [currentPage, setCurrentPage] = useState(1);
 
+  // Cache for fetched pages
+  const cache = useRef<Record<number, CacheData>>({});
   const fetchData = async (page: number) => {
     setLoading(true);
+
+    // Check if the data for the page is already cached
+    if (cache.current[page]) {
+      console.log("Serving from cache:", cache.current[page]);
+      setData(cache.current[page].data);
+      setPagination(cache.current[page].pagination);
+      setLoading(false);
+      return;
+    }
+  console.log("Fetching from server for page:", page);
+
+
     try {
       const apiUrl = import.meta.env.VITE_API_URL;
       const response = await fetch(
@@ -46,6 +65,11 @@ export const useFetchCollections = () => {
         if (result?.collections && result?.pagination) {
           setData(result.collections);
           setPagination(result.pagination);
+           // Cache the fetched data
+        cache.current[page] = {
+          data: result.collections,
+          pagination: result.pagination,
+        };
         } else {
           console.error("Unexpected data format:", result);
         }
@@ -97,6 +121,11 @@ export const useFetchCollections = () => {
       setCurrentPage((prev) => prev + 1);
   };
 
+  const handlePageChange = (page: number) => {
+    setCurrentPage(page);
+    fetchData(page); // Fetch data for the selected page
+  };
+
   return {
     data,
     loading,
@@ -108,5 +137,6 @@ export const useFetchCollections = () => {
     fetchData,
     handleNext,
     handleDelete,
+    handlePageChange,
   };
 };

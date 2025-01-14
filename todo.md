@@ -6,3 +6,4 @@
 10. shift to cloudfare, gcp or AWS.
 12. add password recovery for the email auth.
 15. fix the cors error in the prod when uploading files to pinata.
+16. fix the routing using the react-router in sidebar component and add the authorization to the /dashboard route.
