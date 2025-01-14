@@ -33,6 +33,12 @@ export const useFetchCollections = () => {
 
   // Cache for fetched pages
   const cache = useRef<Record<number, CacheData>>({});
+
+  const clearCache = () => {
+    Object.keys(cache.current).forEach((key) => delete cache.current[parseInt(key)]);
+    console.log("Cache cleared.");
+  };
+
   const fetchData = async (page: number) => {
     setLoading(true);
 
@@ -138,5 +144,6 @@ export const useFetchCollections = () => {
     handleNext,
     handleDelete,
     handlePageChange,
+    clearCache
   };
 };
