@@ -12,13 +12,12 @@ import ErrorPage from "./components/ui/error";
 function App() {
   return (
     <div>
-     
       <Routes>
         <Route
           path="/"
           element={
             <>
-             <Navbar />
+              <Navbar />
               <Main />
               <Page2 />
               <Footer />
@@ -27,34 +26,10 @@ function App() {
         />
         {/* Catch-all route for undefined paths */}
         <Route path="*" element={<ErrorPage />} />
-
-        <Route
-          path="/signup"
-          element={
-            <>
-              <SignUp />
-            </>
-          }
-        />
-       
-        <Route
-          path="/login"
-          element={
-            <>
-              <Login />
-            </>
-          }
-        />
-        <Route
-          path="/dashboard"
-          element={
-            <>
-              <Page />
-            </>
-          }
-        />
+        <Route path="/signup" element={<SignUp />} />
+        <Route path="/login" element={<Login />} />
+        <Route path="/dashboard" element={<Page />} />
       </Routes>
-    
     </div>
   );
 }
