@@ -17,6 +17,7 @@ import { Badge } from "@/components/ui/badge";
 
 interface SidebarProps {
   githubAvatar: string | null;
+  googleAvatar: string | null;
 }
 function Sidebar(props: SidebarProps) {
   const navigate = useNavigate();
@@ -117,9 +118,7 @@ function Sidebar(props: SidebarProps) {
                 <Avatar>
                   <AvatarImage
                     src={
-                      props.githubAvatar
-                        ? props.githubAvatar
-                        : "https://github.com/shadcn.png"
+                      props.googleAvatar || props.githubAvatar || "https://github.com/shadcn.png"
                     }
                     alt="User Avatar"
                   />

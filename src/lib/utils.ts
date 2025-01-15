@@ -35,7 +35,9 @@ export const useFetchCollections = () => {
   const cache = useRef<Record<number, CacheData>>({});
 
   const clearCache = () => {
-    Object.keys(cache.current).forEach((key) => delete cache.current[parseInt(key)]);
+    Object.keys(cache.current).forEach(
+      (key) => delete cache.current[parseInt(key)]
+    );
     console.log("Cache cleared.");
   };
 
@@ -50,8 +52,7 @@ export const useFetchCollections = () => {
       setLoading(false);
       return;
     }
-  console.log("Fetching from server for page:", page);
-
+    console.log("Fetching from server for page:", page);
 
     try {
       const apiUrl = import.meta.env.VITE_API_URL;
@@ -71,11 +72,11 @@ export const useFetchCollections = () => {
         if (result?.collections && result?.pagination) {
           setData(result.collections);
           setPagination(result.pagination);
-           // Cache the fetched data
-        cache.current[page] = {
-          data: result.collections,
-          pagination: result.pagination,
-        };
+          // Cache the fetched data
+          cache.current[page] = {
+            data: result.collections,
+            pagination: result.pagination,
+          };
         } else {
           console.error("Unexpected data format:", result);
         }
@@ -102,10 +103,10 @@ export const useFetchCollections = () => {
           credentials: "include",
         }
       );
-
       if (response.ok) {
         console.log("Collection deleted successfully");
-        await fetchData(currentPage);
+         delete cache.current[currentPage];
+         await fetchData(currentPage);
       } else {
         console.error("Failed to delete collection");
       }
@@ -144,6 +145,6 @@ export const useFetchCollections = () => {
     handleNext,
     handleDelete,
     handlePageChange,
-    clearCache
+    clearCache,
   };
 };
