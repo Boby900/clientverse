@@ -4,6 +4,7 @@ import { useSearchParams } from "react-router";
 function Page() {
   const [params] = useSearchParams()
   const github_avatar = params.get('github_avatar');
+  const google_avatar = params.get('google_avatar')
   
   return (
     <div>
@@ -12,7 +13,7 @@ function Page() {
         This is a demo of Clientverse admin dashboard. The database resets every
         hour. Realtime data and file upload are disabled.
       </div>
-     <Sidebar githubAvatar={github_avatar} />
+     <Sidebar githubAvatar={github_avatar} googleAvatar={google_avatar}/>
   
      <div className="pb-2 mb-2">
 
