@@ -5,9 +5,9 @@ import Main from "./layout/Main";
 import Navbar from "./layout/Navbar";
 import Page2 from "./layout/Page2";
 import { Routes, Route } from "react-router";
-import Page from "./pages/dashboard/Page";
 import Login from "./auth/Login";
 import ErrorPage from "./components/ui/error";
+import Sidebar from "./pages/dashboard/Sidebar";
 
 function App() {
   return (
@@ -28,7 +28,7 @@ function App() {
         <Route path="*" element={<ErrorPage />} />
         <Route path="/signup" element={<SignUp />} />
         <Route path="/login" element={<Login />} />
-        <Route path="/dashboard" element={<Page />} />
+        <Route path="/dashboard" element={<Sidebar />} />
       </Routes>
     </div>
   );

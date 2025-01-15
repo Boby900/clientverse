@@ -14,13 +14,15 @@ import AllCollection from "./AllCollection";
 import Pinata from "./uploadPinata";
 import { useBadge } from "@/hooks/badgeContext";
 import { Badge } from "@/components/ui/badge";
+import { useSearchParams } from "react-router";
 
-interface SidebarProps {
-  githubAvatar: string | null;
-  googleAvatar: string | null;
-}
-function Sidebar(props: SidebarProps) {
+
+function Sidebar() {
+  const [params] = useSearchParams()
+  const github_avatar = params.get('github_avatar');
+  const google_avatar = params.get('google_avatar')
   const navigate = useNavigate();
+  console.log(google_avatar)
   const [activeComponent, setActiveComponent] = useState("home");
   const apiUrl = import.meta.env.VITE_API_URL;
   const { isNew, reset } = useBadge(); // Access reset from BadgeContext
@@ -69,6 +71,11 @@ function Sidebar(props: SidebarProps) {
     }
   };
   return (
+    <div>
+  <div className="p-4 border-4 m-2  text-center  ">
+    This is a demo of Clientverse admin dashboard. The database resets every
+    hour. Realtime data and file upload are disabled.
+  </div>
     <div className="flex  border-4 m-4 p-4 ">
       {/* Sidebar */}
       <div className="sm:w-24 w-34  bg-gray-950 text-white flex flex-col">
@@ -118,7 +125,7 @@ function Sidebar(props: SidebarProps) {
                 <Avatar>
                   <AvatarImage
                     src={
-                      props.googleAvatar || props.githubAvatar || "https://github.com/shadcn.png"
+                      google_avatar || github_avatar || "https://github.com/shadcn.png"
                     }
                     alt="User Avatar"
                   />
@@ -137,7 +144,11 @@ function Sidebar(props: SidebarProps) {
       {/* Main Content */}
       <div className="m-6 p-6 w-screen">{renderContent()}</div>
     </div>
+    </div>
+
   );
+
+  
 }
 
 export default Sidebar;
