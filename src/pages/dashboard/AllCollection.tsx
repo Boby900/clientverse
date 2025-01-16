@@ -82,7 +82,7 @@ function AllCollection() {
                 <Button
                   variant="secondary"
                   size="sm"
-                  onClick={() => navigate(`/dashboard/card/${card.id}`)}
+                  onClick={() => navigate(`/dashboard/collections/${card.id}`)}
                 >
                   Edit
                 </Button>

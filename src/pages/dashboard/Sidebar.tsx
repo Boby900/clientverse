@@ -16,46 +16,48 @@ import { useUser } from "@/hooks/userContext";
 function Sidebar() {
   const { setUser, user } = useUser();
   const [params] = useSearchParams();
-  const github_avatar = params.get('github_avatar');
-  const google_avatar = params.get('google_avatar');
+  const github_avatar = params.get("github_avatar");
+  const google_avatar = params.get("google_avatar");
   const apiUrl = import.meta.env.VITE_API_URL;
   const navigate = useNavigate();
 
-  const { isNew } = useBadge(); // Access reset from BadgeContext
-  useEffect(() =>{
-    if(github_avatar || google_avatar){
+  const { isNew, reset} = useBadge(); // Access reset from BadgeContext
+  useEffect(() => {
+    if (github_avatar || google_avatar) {
       setUser({
         githubAvatar: github_avatar || undefined,
-        googleAvatar: google_avatar || undefined
-      })
+        googleAvatar: google_avatar || undefined,
+      });
     }
-  },[
-    github_avatar, google_avatar, setUser
-  ])
+  }, [github_avatar, google_avatar, setUser]);
   async function logout() {
     // Logout logic
-   try{const response = await fetch(`${apiUrl}/api/auth/logout`, {
-      method: "POST",
-      credentials: "include", // Ensures cookies are sent with the request
-      headers: {
-        "Content-Type": "application/json",
-      },
-    });
+    try {
+      const response = await fetch(`${apiUrl}/api/auth/logout`, {
+        method: "POST",
+        credentials: "include", // Ensures cookies are sent with the request
+        headers: {
+          "Content-Type": "application/json",
+        },
+      });
 
-    if (response.ok) {
-      navigate("/");
+      if (response.ok) {
+        navigate("/");
+      }
+    } catch (error) {
+      console.error("Error:", error);
     }
-  } catch (error) {
-    console.error("Error:", error);
   }
-  }
+  const handleCollectionsClick = () => {
+    reset(); // Reset the "New" state
+    navigate("/dashboard/collections"); // Navigate to collections
+  };
 
   return (
     <div>
       <div className="p-4 border-4 m-2 text-center">
         This is a demo of Clientverse admin dashboard. The database resets every
         hour. Realtime data and file upload are disabled.
-
       </div>
       <div className="flex border-4 m-4 p-4">
         {/* Sidebar */}
@@ -66,18 +68,28 @@ function Sidebar() {
                 <Squirrel size={32} />
               </span>
             </Link>
-            <Link to="/dashboard/collections" className="p-2 rounded hover:bg-gray-700">
+            <button
+              onClick={handleCollectionsClick} // Use the click handler
+              className="p-2 rounded hover:bg-gray-700"
+            >
               <span title="Collections">
                 <Database size={32} />
-                {isNew && <Badge>New</Badge>} {/* Show "New" if isNew is true */}
+                {isNew && <Badge>New</Badge>}{" "}
+                {/* Show "New" if isNew is true */}
               </span>
-            </Link>
-            <Link to="/dashboard/logs" className="p-2 rounded hover:bg-gray-700">
+            </button>
+            <Link
+              to="/dashboard/logs"
+              className="p-2 rounded hover:bg-gray-700"
+            >
               <span title="Logs">
                 <ChartSpline size={32} />
               </span>
             </Link>
-            <Link to="/dashboard/settings" className="p-2 rounded hover:bg-gray-700">
+            <Link
+              to="/dashboard/settings"
+              className="p-2 rounded hover:bg-gray-700"
+            >
               <span title="Settings">
                 <File size={32} />
               </span>
@@ -93,7 +105,11 @@ function Sidebar() {
                 <DropdownMenuTrigger>
                   <Avatar>
                     <AvatarImage
-                      src={user?.googleAvatar || user?.githubAvatar || "https://github.com/shadcn.png"}
+                      src={
+                        user?.googleAvatar ||
+                        user?.githubAvatar ||
+                        "https://github.com/shadcn.png"
+                      }
                       alt="User Avatar"
                     />
                     <AvatarFallback>CN</AvatarFallback>
