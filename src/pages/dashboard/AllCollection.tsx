@@ -24,6 +24,7 @@ import {
   AlertDialogTitle,
   AlertDialogTrigger,
 } from "@/components/ui/alert-dialog.tsx";
+import { Badge } from "@/components/ui/badge";
 
 function AllCollection() {
   const { scrollYProgress } = useScroll();
@@ -43,8 +44,8 @@ function AllCollection() {
     handleNext,
     handleDelete,
     handlePageChange,
+    fields,
   } = useFetchCollections();
-
   return (
     <div className="grid sm:grid-cols-2 gap-6 p-6  rounded-lg">
       {loading ? (
@@ -68,30 +69,40 @@ function AllCollection() {
               <CardHeader className="relative overflow-hidden pb-8">
                 <div className="absolute inset-0 bg-gradient-to-r from-primary to-primary-foreground opacity-10"></div>
                 <Flame className={`w-8 h-8 text-purple-500 mb-2`} />
-                <CardTitle className="text-lg font-bold">
+                <CardTitle className="text-lg truncate font-bold">
                   {card.tableName}
                 </CardTitle>
-                <CardDescription>table id {card.id}</CardDescription>
               </CardHeader>
+              <CardDescription className="text-center font-bold p-1">Selected fields</CardDescription>
               <CardContent>
-                <p className="text-sm text-muted-foreground">
-                  user id {card.userId}
-                </p>
+                {Array.isArray(fields) ? (
+                  fields.map((fieldArray, index) => (
+                    <div key={index} className="flex  gap-2 mt-2">
+                      {fieldArray.map((field, subIndex) => (
+                        <Badge key={subIndex} variant="outline">
+                          {field}
+                        </Badge>
+                      ))}
+                    </div>
+                  ))
+                ) : (
+                  <p>Invalid fields data</p>
+                )}
               </CardContent>
+
               <CardFooter className="flex justify-between items-center">
                 <Button
                   variant="secondary"
                   size="sm"
                   onClick={() => navigate(`/dashboard/collections/${card.id}`)}
                 >
-                  Edit
+                  Insert data
                 </Button>
                 <AlertDialog>
                   <AlertDialogTrigger>
-                    {" "}
-                    <Button variant="destructive" size="sm">
-                      Delete
-                    </Button>
+                  <div className="inline-flex items-center justify-center rounded-md text-sm font-medium ring-offset-background transition-colors focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2 disabled:pointer-events-none disabled:opacity-50 bg-destructive text-destructive-foreground hover:bg-destructive/90 h-8 px-4 py-2">
+    Delete
+</div>
                   </AlertDialogTrigger>
                   <AlertDialogContent>
                     <AlertDialogHeader>
@@ -100,7 +111,7 @@ function AllCollection() {
                       </AlertDialogTitle>
                       <AlertDialogDescription>
                         This action cannot be undone. This will permanently
-                        delete your account and remove your data from our
+                        delete your record and remove your data from our
                         servers.
                       </AlertDialogDescription>
                     </AlertDialogHeader>

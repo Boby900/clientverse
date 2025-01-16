@@ -1,12 +1,13 @@
 import { clsx, type ClassValue } from "clsx";
 import { twMerge } from "tailwind-merge";
-import { useState, useEffect, useRef } from "react";
+import { useState, useEffect } from "react";
 
 interface CollectionData {
   id: number;
   createdAt: Date | null;
   tableName: string;
   userId: number;
+  selectedFields: string;
 }
 
 interface PaginationData {
@@ -14,11 +15,6 @@ interface PaginationData {
   limit: number; // Number of items per page
   total: number; // Total number of collections
   totalPages: number; // Total number of pages
-}
-
-interface CacheData {
-  data: CollectionData[];
-  pagination: PaginationData;
 }
 
 export function cn(...inputs: ClassValue[]) {
@@ -30,29 +26,13 @@ export const useFetchCollections = () => {
   const [loading, setLoading] = useState(true);
   const [pagination, setPagination] = useState<PaginationData | null>(null);
   const [currentPage, setCurrentPage] = useState(1);
+  const [fields, setFields] = useState<string[][]>([]);
 
   // Cache for fetched pages
-  const cache = useRef<Record<number, CacheData>>({});
-
-  const clearCache = () => {
-    Object.keys(cache.current).forEach(
-      (key) => delete cache.current[parseInt(key)]
-    );
-    console.log("Cache cleared.");
-  };
 
   const fetchData = async (page: number) => {
     setLoading(true);
 
-    // Check if the data for the page is already cached
-    if (cache.current[page]) {
-      console.log("Serving from cache:", cache.current[page]);
-      setData(cache.current[page].data);
-      setPagination(cache.current[page].pagination);
-      setLoading(false);
-      return;
-    }
-    console.log("Fetching from server for page:", page);
 
     try {
       const apiUrl = import.meta.env.VITE_API_URL;
@@ -72,11 +52,13 @@ export const useFetchCollections = () => {
         if (result?.collections && result?.pagination) {
           setData(result.collections);
           setPagination(result.pagination);
-          // Cache the fetched data
-          cache.current[page] = {
-            data: result.collections,
-            pagination: result.pagination,
-          };
+
+          const fieldsFromApi = result.collections.map((item: CollectionData) =>
+            JSON.parse(item.selectedFields)
+          );
+          setFields(
+            fieldsFromApi
+          );
         } else {
           console.error("Unexpected data format:", result);
         }
@@ -105,8 +87,7 @@ export const useFetchCollections = () => {
       );
       if (response.ok) {
         console.log("Collection deleted successfully");
-         delete cache.current[currentPage];
-         await fetchData(currentPage);
+        await fetchData(currentPage);
       } else {
         console.error("Failed to delete collection");
       }
@@ -145,6 +126,6 @@ export const useFetchCollections = () => {
     handleNext,
     handleDelete,
     handlePageChange,
-    clearCache,
+    fields,
   };
 };

@@ -43,7 +43,7 @@ export function DialogDemo() {
   const { toast } = useToast()
   const { setNew } = useBadge();  // Get the `setNew` function from context
 
-  const {fetchData, currentPage, clearCache} = useFetchCollections();
+  const {fetchData, currentPage } = useFetchCollections();
 
   const handleNameChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     setName(e.target.value);
@@ -78,7 +78,6 @@ export function DialogDemo() {
       const data = await response.json();
   
       if (response.ok) {
-        clearCache();
         console.log(data.message); // Success message
         // Optionally, clear the form or show a success notification
         console.log(currentPage)

@@ -9,6 +9,7 @@ import {
 } from "@/components/ui/table";
 import { useEffect, useState } from "react";
 import { SkeletonCard } from "./Skeleton";
+import { Input } from "@/components/ui/input";
 
 type User = {
   id: number; // Adjust based on the actual type of `id`
@@ -53,6 +54,7 @@ try{
         <TableCaption>A list of recent users.</TableCaption>
         <TableHeader>
           <TableRow>
+            <TableHead><Input type="checkbox" className="w-[20px]" /></TableHead>
             <TableHead>ID</TableHead>
             <TableHead>Email</TableHead>
             <TableHead>Created At</TableHead>
@@ -63,6 +65,9 @@ try{
         <TableBody>
           {userData.map((data) => (
             <TableRow key={data.id}>
+              <TableCell>
+                <Input className="w-[20px]" type="checkbox" />
+              </TableCell>
               <TableCell className="font-medium">{data.id}</TableCell>
               <TableCell>{data.email || "N/A"}</TableCell>
               <TableCell>{data.createdAt}</TableCell>
