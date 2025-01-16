@@ -5,9 +5,12 @@ import Main from "./layout/Main";
 import Navbar from "./layout/Navbar";
 import Page2 from "./layout/Page2";
 import { Routes, Route } from "react-router";
-import Page from "./pages/dashboard/Page";
 import Login from "./auth/Login";
 import ErrorPage from "./components/ui/error";
+import Sidebar from "./pages/dashboard/Sidebar";
+import { TableDemo } from "./pages/dashboard/Home";
+import AllCollection from "./pages/dashboard/AllCollection";
+import Pinata from "./pages/dashboard/uploadPinata";
 
 function App() {
   return (
@@ -28,7 +31,12 @@ function App() {
         <Route path="*" element={<ErrorPage />} />
         <Route path="/signup" element={<SignUp />} />
         <Route path="/login" element={<Login />} />
-        <Route path="/dashboard" element={<Page />} />
+        <Route path="/dashboard" element={<Sidebar />}>
+          <Route index element={<TableDemo />} /> {/* Default child route */}
+          <Route path="collections" element={<AllCollection />} />
+          <Route path="logs" element={<h1>Logs Component</h1>} />
+          <Route path="settings" element={<Pinata />} />
+        </Route>{" "}
       </Routes>
     </div>
   );
