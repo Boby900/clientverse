@@ -12,9 +12,22 @@ import { Button } from "@/components/ui/button";
 import { Flame } from "lucide-react";
 // import { PaginationDemo } from "./pagination";
 import { useFetchCollections } from "@/lib/utils";
+import { useNavigate } from "react-router";
+import {
+  AlertDialog,
+  AlertDialogAction,
+  AlertDialogCancel,
+  AlertDialogContent,
+  AlertDialogDescription,
+  AlertDialogFooter,
+  AlertDialogHeader,
+  AlertDialogTitle,
+  AlertDialogTrigger,
+} from "@/components/ui/alert-dialog.tsx";
 
 function AllCollection() {
   const { scrollYProgress } = useScroll();
+  const navigate = useNavigate();
   const scaleX = useSpring(scrollYProgress, {
     stiffness: 100,
     damping: 30,
@@ -31,10 +44,6 @@ function AllCollection() {
     handleDelete,
     handlePageChange,
   } = useFetchCollections();
-
-  const handleVisit = () => {
-    console.log("hurray");
-  };
 
   return (
     <div className="grid sm:grid-cols-2 gap-6 p-6  rounded-lg">
@@ -73,17 +82,36 @@ function AllCollection() {
                 <Button
                   variant="secondary"
                   size="sm"
-                  onClick={() => handleVisit()}
+                  onClick={() => navigate(`/dashboard/card/${card.id}`)}
                 >
-                  Visit
+                  Edit
                 </Button>
-                <Button
-                  variant="destructive"
-                  size="sm"
-                  onClick={() => handleDelete(card.id)}
-                >
-                  Delete
-                </Button>
+                <AlertDialog>
+                  <AlertDialogTrigger>
+                    {" "}
+                    <Button variant="destructive" size="sm">
+                      Delete
+                    </Button>
+                  </AlertDialogTrigger>
+                  <AlertDialogContent>
+                    <AlertDialogHeader>
+                      <AlertDialogTitle>
+                        Are you absolutely sure?
+                      </AlertDialogTitle>
+                      <AlertDialogDescription>
+                        This action cannot be undone. This will permanently
+                        delete your account and remove your data from our
+                        servers.
+                      </AlertDialogDescription>
+                    </AlertDialogHeader>
+                    <AlertDialogFooter>
+                      <AlertDialogCancel>Cancel</AlertDialogCancel>
+                      <AlertDialogAction onClick={() => handleDelete(card.id)}>
+                        Delete
+                      </AlertDialogAction>
+                    </AlertDialogFooter>
+                  </AlertDialogContent>
+                </AlertDialog>
               </CardFooter>
             </Card>
           </div>
