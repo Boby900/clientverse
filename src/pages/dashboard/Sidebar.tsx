@@ -11,8 +11,10 @@ import {
 import { DialogDemo } from "./NewCollection";
 import { useBadge } from "@/hooks/badgeContext";
 import { Badge } from "@/components/ui/badge";
-
+import { useEffect } from "react";
+import { useUser } from "@/hooks/userContext";
 function Sidebar() {
+  const { setUser, user } = useUser();
   const [params] = useSearchParams();
   const github_avatar = params.get('github_avatar');
   const google_avatar = params.get('google_avatar');
@@ -20,7 +22,16 @@ function Sidebar() {
   const navigate = useNavigate();
 
   const { isNew } = useBadge(); // Access reset from BadgeContext
-
+  useEffect(() =>{
+    if(github_avatar || google_avatar){
+      setUser({
+        githubAvatar: github_avatar || undefined,
+        googleAvatar: google_avatar || undefined
+      })
+    }
+  },[
+    github_avatar, google_avatar, setUser
+  ])
   async function logout() {
     // Logout logic
    try{const response = await fetch(`${apiUrl}/api/auth/logout`, {
@@ -44,6 +55,7 @@ function Sidebar() {
       <div className="p-4 border-4 m-2 text-center">
         This is a demo of Clientverse admin dashboard. The database resets every
         hour. Realtime data and file upload are disabled.
+
       </div>
       <div className="flex border-4 m-4 p-4">
         {/* Sidebar */}
@@ -81,7 +93,7 @@ function Sidebar() {
                 <DropdownMenuTrigger>
                   <Avatar>
                     <AvatarImage
-                      src={google_avatar || github_avatar || "https://github.com/shadcn.png"}
+                      src={user?.googleAvatar || user?.githubAvatar || "https://github.com/shadcn.png"}
                       alt="User Avatar"
                     />
                     <AvatarFallback>CN</AvatarFallback>
