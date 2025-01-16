@@ -37,7 +37,7 @@ function App() {
           <Route path="collections" element={<AllCollection />} />
           <Route path="logs" element={<h1>Logs Component</h1>} />
           <Route path="settings" element={<Pinata />} />
-          <Route path="card/:id" element={<EditCard />} /> {/* New route for card details */}
+          <Route path="collections/:id" element={<EditCard />} /> {/* New route for card details */}
 
         </Route>{" "}
       </Routes>
