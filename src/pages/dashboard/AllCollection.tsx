@@ -12,9 +12,11 @@ import { Button } from "@/components/ui/button";
 import { Flame } from "lucide-react";
 // import { PaginationDemo } from "./pagination";
 import { useFetchCollections } from "@/lib/utils";
+import { useNavigate } from "react-router";
 
 function AllCollection() {
   const { scrollYProgress } = useScroll();
+  const navigate = useNavigate();
   const scaleX = useSpring(scrollYProgress, {
     stiffness: 100,
     damping: 30,
@@ -32,9 +34,6 @@ function AllCollection() {
     handlePageChange,
   } = useFetchCollections();
 
-  const handleVisit = () => {
-    console.log("hurray");
-  };
 
   return (
     <div className="grid sm:grid-cols-2 gap-6 p-6  rounded-lg">
@@ -73,9 +72,9 @@ function AllCollection() {
                 <Button
                   variant="secondary"
                   size="sm"
-                  onClick={() => handleVisit()}
+                  onClick={() => navigate(`/dashboard/card/${card.id}`)} 
                 >
-                  Visit
+                  Edit
                 </Button>
                 <Button
                   variant="destructive"
