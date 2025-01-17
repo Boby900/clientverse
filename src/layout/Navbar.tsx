@@ -4,6 +4,7 @@ import {
   DropdownMenuSeparator,
 } from "@/components/ui/dropdown-menu";
 import { Input } from "@/components/ui/input";
+import TwitterShareButton from "@/twitter/twitter";
 import {
   DropdownMenu,
   DropdownMenuTrigger,
@@ -29,6 +30,7 @@ function Navbar() {
             />
           </li>
           <li className="hidden lg:block">FAQ</li>
+          
           <li className="hidden lg:block">
             <a target="_blank" href="https://github.com/Boby900/clientverse">
               <Github />
@@ -38,6 +40,13 @@ function Navbar() {
             <a href="#" className="hidden lg:block">
               Documentation
             </a>
+          </li>
+          <li className="hidden lg:block">
+            <TwitterShareButton
+              text="Check out Contentverse!"
+              url="https://clientverse.vercel.app/"
+              hashtags={["Contentverse", "CMS"]}
+            />
           </li>
           <li className="lg:hidden flex-shrink-0 max-w-full">
             <a href="" className="block">
@@ -56,10 +65,12 @@ function Navbar() {
                   <DropdownMenuItem>
                     <span>
                       {" "}
-                      <a target="_blank" href="https://github.com/Boby900/clientverse">
+                      <a
+                        target="_blank"
+                        href="https://github.com/Boby900/clientverse"
+                      >
                         <Github />
                       </a>
-                    
                     </span>
                   </DropdownMenuItem>
                 </DropdownMenuContent>
