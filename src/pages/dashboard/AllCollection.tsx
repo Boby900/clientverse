@@ -8,6 +8,15 @@ import {
   CardHeader,
   CardTitle,
 } from "@/components/ui/card";
+import {
+  Sheet,
+  SheetContent,
+  SheetDescription,
+  SheetHeader,
+  SheetTitle,
+  SheetTrigger,
+} from "@/components/ui/sheet";
+
 import { Button } from "@/components/ui/button";
 import { Flame, MoveRight, PlusCircle, Trash2 } from "lucide-react";
 // import { PaginationDemo } from "./pagination";
@@ -85,7 +94,8 @@ function AllCollection() {
                   Selected fields
                 </CardDescription>
                 <CardContent>
-                  {Array.isArray(selectedFields) && selectedFields.length > 0 ? (
+                  {Array.isArray(selectedFields) &&
+                  selectedFields.length > 0 ? (
                     <div className="flex gap-2 mt-2 flex-wrap">
                       {selectedFields.map((field, fieldIndex) => (
                         <Badge key={fieldIndex} variant="outline">
@@ -106,19 +116,28 @@ function AllCollection() {
                       navigate(`/dashboard/collections/${card.id}`)
                     }
                   >
-                    Visit                    <MoveRight />
-
+                    Visit <MoveRight />
                   </Button>
-                  <Button
-                    variant="secondary"
-                    size="sm"
-                  >
-                    Insert data <PlusCircle />
-                  </Button>
+                  {/* add the form in here to submit the data and insert it into the specific table*/}
+                  <Sheet>
+                    <SheetTrigger className="inline-flex items-center justify-center rounded-md text-sm font-medium ring-offset-background transition-colors focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2 disabled:pointer-events-none disabled:opacity-50 bg-secondary text-destructive-foreground hover:bg-secondary/90 h-8 px-4 py-2">
+                      Insert data <PlusCircle size={20} />{" "}
+                    </SheetTrigger>
+                    <SheetContent>
+                      <SheetHeader>
+                        <SheetTitle>Are you absolutely sure?</SheetTitle>
+                        <SheetDescription>
+                          This action cannot be undone. This will permanently
+                          delete your account and remove your data from our
+                          servers.
+                        </SheetDescription>
+                      </SheetHeader>
+                    </SheetContent>
+                  </Sheet>
                   <AlertDialog>
                     <AlertDialogTrigger>
                       <div className="inline-flex items-center justify-center rounded-md text-sm font-medium ring-offset-background transition-colors focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2 disabled:pointer-events-none disabled:opacity-50 bg-destructive text-destructive-foreground hover:bg-destructive/90 h-8 px-4 py-2">
-                        Delete <Trash2 size={16}/>
+                        Delete <Trash2 size={16} />
                       </div>
                     </AlertDialogTrigger>
                     <AlertDialogContent>
