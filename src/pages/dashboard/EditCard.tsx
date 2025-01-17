@@ -1,5 +1,13 @@
 // import { useParams } from "react-router"; // Import useParams
-
+import {
+  Table,
+  TableBody,
+  TableCaption,
+  TableCell,
+  TableHead,
+  TableHeader,
+  TableRow,
+} from "@/components/ui/table";
 function EditCard() {
   // const { id } = useParams(); // Get the card ID from the URL
 
@@ -7,11 +15,32 @@ function EditCard() {
   // if (error) return <p>Error loading card details.</p>;
 
   return (
-    <div>
-      <h1>Welcome to Edit Card</h1>
-     
-      {/* Add more details as needed */}
-    </div>
+    <Table>
+      <TableCaption>All of your data.</TableCaption>
+      <TableHeader>
+        <TableRow>
+          <TableHead>
+          </TableHead>
+          <TableHead>ID</TableHead>
+          <TableHead>Email</TableHead>
+          <TableHead>Created At</TableHead>
+          <TableHead>GitHub ID</TableHead>
+          <TableHead>GitHub Username</TableHead>
+        </TableRow>
+      </TableHeader>
+      <TableBody>
+          <TableRow>
+            <TableCell>
+            </TableCell>
+            <TableCell className="font-medium">Text</TableCell>
+            <TableCell>Text</TableCell>
+            <TableCell>Text</TableCell>
+            <TableCell>Text</TableCell>
+            <TableCell>Text</TableCell>
+          </TableRow>
+    
+      </TableBody>
+    </Table>
   );
 }
 

@@ -9,7 +9,7 @@ import {
   CardTitle,
 } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
-import { Flame } from "lucide-react";
+import { Flame, MoveRight, PlusCircle, Trash2 } from "lucide-react";
 // import { PaginationDemo } from "./pagination";
 import { useFetchCollections } from "@/lib/utils";
 import { useNavigate } from "react-router";
@@ -24,6 +24,7 @@ import {
   AlertDialogTitle,
   AlertDialogTrigger,
 } from "@/components/ui/alert-dialog.tsx";
+import { Badge } from "@/components/ui/badge";
 
 function AllCollection() {
   const { scrollYProgress } = useScroll();
@@ -44,78 +45,108 @@ function AllCollection() {
     handleDelete,
     handlePageChange,
   } = useFetchCollections();
+  console.log(
+    data.map((par) => {
+      return JSON.parse(par.selectedFields);
+    })
+  );
 
   return (
     <div className="grid sm:grid-cols-2 gap-6 p-6  rounded-lg">
       {loading ? (
         <p>Loading collections...</p>
       ) : data.length > 0 ? (
-        data.map((card, index) => (
-          <div key={index}>
-            <motion.div
-              style={{
-                scaleX,
-                position: "fixed",
-                top: 0,
-                left: 0,
-                right: 0,
-                height: 10,
-                originX: 0,
-                backgroundColor: "#ff0088   ",
-              }}
-            />
-            <Card className="overflow-hidden transition-all duration-300 hover:shadow-lg">
-              <CardHeader className="relative overflow-hidden pb-8">
-                <div className="absolute inset-0 bg-gradient-to-r from-primary to-primary-foreground opacity-10"></div>
-                <Flame className={`w-8 h-8 text-purple-500 mb-2`} />
-                <CardTitle className="text-lg font-bold">
-                  {card.tableName}
-                </CardTitle>
-                <CardDescription>table id {card.id}</CardDescription>
-              </CardHeader>
-              <CardContent>
-                <p className="text-sm text-muted-foreground">
-                  user id {card.userId}
-                </p>
-              </CardContent>
-              <CardFooter className="flex justify-between items-center">
-                <Button
-                  variant="secondary"
-                  size="sm"
-                  onClick={() => navigate(`/dashboard/collections/${card.id}`)}
-                >
-                  Edit
-                </Button>
-                <AlertDialog>
-                  <AlertDialogTrigger>
-                    {" "}
-                    <Button variant="destructive" size="sm">
-                      Delete
-                    </Button>
-                  </AlertDialogTrigger>
-                  <AlertDialogContent>
-                    <AlertDialogHeader>
-                      <AlertDialogTitle>
-                        Are you absolutely sure?
-                      </AlertDialogTitle>
-                      <AlertDialogDescription>
-                        This action cannot be undone. This will permanently
-                        delete your account and remove your data from our
-                        servers.
-                      </AlertDialogDescription>
-                    </AlertDialogHeader>
-                    <AlertDialogFooter>
-                      <AlertDialogCancel>Cancel</AlertDialogCancel>
-                      <AlertDialogAction onClick={() => handleDelete(card.id)}>
-                        Delete
-                      </AlertDialogAction>
-                    </AlertDialogFooter>
-                  </AlertDialogContent>
-                </AlertDialog>
-              </CardFooter>
-            </Card>
-          </div>
-        ))
+        data.map((card, index) => {
+          const selectedFields = JSON.parse(card.selectedFields); // Parse selected fields for each card
+
+          return (
+            <div key={index}>
+              <motion.div
+                style={{
+                  scaleX,
+                  position: "fixed",
+                  top: 0,
+                  left: 0,
+                  right: 0,
+                  height: 10,
+                  originX: 0,
+                  backgroundColor: "#ff0088   ",
+                }}
+              />
+              <Card className="overflow-hidden transition-all duration-300 hover:shadow-lg">
+                <CardHeader className="relative overflow-hidden pb-8">
+                  <div className="absolute inset-0 bg-gradient-to-r from-primary to-primary-foreground opacity-10"></div>
+                  <Flame className={`w-8 h-8 text-purple-500 mb-2`} />
+                  <CardTitle className="text-lg truncate font-bold">
+                    {card.tableName}
+                  </CardTitle>
+                </CardHeader>
+                <CardDescription className="text-center font-bold p-1">
+                  Selected fields
+                </CardDescription>
+                <CardContent>
+                  {Array.isArray(selectedFields) && selectedFields.length > 0 ? (
+                    <div className="flex gap-2 mt-2 flex-wrap">
+                      {selectedFields.map((field, fieldIndex) => (
+                        <Badge key={fieldIndex} variant="outline">
+                          {field}
+                        </Badge>
+                      ))}
+                    </div>
+                  ) : (
+                    <p>Invalid fields data</p>
+                  )}
+                </CardContent>
+
+                <CardFooter className="flex justify-between items-center">
+                  <Button
+                    variant="secondary"
+                    size="sm"
+                    onClick={() =>
+                      navigate(`/dashboard/collections/${card.id}`)
+                    }
+                  >
+                    Visit                    <MoveRight />
+
+                  </Button>
+                  <Button
+                    variant="secondary"
+                    size="sm"
+                  >
+                    Insert data <PlusCircle />
+                  </Button>
+                  <AlertDialog>
+                    <AlertDialogTrigger>
+                      <div className="inline-flex items-center justify-center rounded-md text-sm font-medium ring-offset-background transition-colors focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2 disabled:pointer-events-none disabled:opacity-50 bg-destructive text-destructive-foreground hover:bg-destructive/90 h-8 px-4 py-2">
+                        Delete <Trash2 size={16}/>
+                      </div>
+                    </AlertDialogTrigger>
+                    <AlertDialogContent>
+                      <AlertDialogHeader>
+                        <AlertDialogTitle>
+                          Are you absolutely sure?
+                        </AlertDialogTitle>
+                        <AlertDialogDescription>
+                          This action cannot be undone. This will permanently
+                          delete your record and remove your data from our
+                          servers.
+                        </AlertDialogDescription>
+                      </AlertDialogHeader>
+                      <AlertDialogFooter>
+                        <AlertDialogCancel>Cancel</AlertDialogCancel>
+                        <AlertDialogAction
+                          onClick={() => handleDelete(card.id)}
+                        >
+                          Delete
+                        </AlertDialogAction>
+                      </AlertDialogFooter>
+                    </AlertDialogContent>
+                  </AlertDialog>
+                </CardFooter>
+              </Card>
+            </div>
+          );
+        })
       ) : (
         <p>No collections found.</p>
       )}
