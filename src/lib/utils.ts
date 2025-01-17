@@ -26,7 +26,6 @@ export const useFetchCollections = () => {
   const [loading, setLoading] = useState(true);
   const [pagination, setPagination] = useState<PaginationData | null>(null);
   const [currentPage, setCurrentPage] = useState(1);
-  const [fields, setFields] = useState<string[][]>([]);
 
   // Cache for fetched pages
 
@@ -53,12 +52,8 @@ export const useFetchCollections = () => {
           setData(result.collections);
           setPagination(result.pagination);
 
-          const fieldsFromApi = result.collections.map((item: CollectionData) =>
-            JSON.parse(item.selectedFields)
-          );
-          setFields(
-            fieldsFromApi
-          );
+    
+     
         } else {
           console.error("Unexpected data format:", result);
         }
@@ -126,6 +121,5 @@ export const useFetchCollections = () => {
     handleNext,
     handleDelete,
     handlePageChange,
-    fields,
   };
 };
