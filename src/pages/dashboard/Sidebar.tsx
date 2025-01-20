@@ -8,7 +8,7 @@ import {
   DropdownMenuItem,
   DropdownMenuTrigger,
 } from "@/components/ui/dropdown-menu";
-import { DialogDemo } from "./NewCollection";
+import { NewCollection } from "./NewCollection";
 import { useBadge } from "@/hooks/badgeContext";
 import { Badge } from "@/components/ui/badge";
 import { useEffect } from "react";
@@ -96,7 +96,7 @@ function Sidebar() {
             </Link>
             <button className="p-2 rounded hover:bg-gray-700">
               <span title="Make a new collection">
-                <DialogDemo />
+                <NewCollection />
               </span>
             </button>
 

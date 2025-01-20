@@ -4,7 +4,7 @@ interface User {
   githubAvatar?: string;
 }
 // Create a context for user information
-const UserContext = createContext<{
+export const UserContext = createContext<{
   user: User | null;
   setUser: React.Dispatch<React.SetStateAction<User | null>>;
 } | null>(null); // Default value is null
