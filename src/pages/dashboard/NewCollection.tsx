@@ -21,6 +21,7 @@ import { LoaderCircle } from "lucide-react";
 import { useBadge } from "@/hooks/badgeContext";
 import { z, ZodError} from "zod";
 
+
 const AVAILABLE_FIELDS = [
   { id: "created", label: "Created" },
   { id: "description", label: "Description" },
@@ -33,7 +34,7 @@ const FormSchema = z.object({
   fields: z.array(z.string()).min(1, { message: "At least one field must be selected" })
 });
 
-export function DialogDemo() {
+export function NewCollection() {
   const [name, setName] = useState(""); // State for name
   const [validationError, setValidationError] = useState<string | null>(null); // State for validation error
   const [selectedFields, setSelectedFields] = useState<string[]>([]);
@@ -110,7 +111,7 @@ export function DialogDemo() {
   return (
       <Dialog open={isDialogOpen} onOpenChange={setIsDialogOpen}>
         <DialogTrigger asChild>
-          <Plus  size={36} />
+          <Plus id="plus-icon" data-testid="plus-icon" size={36} />
         </DialogTrigger>
         <DialogContent className="sm:max-w-[425px]">
         <form onSubmit={handleSubmit}>
