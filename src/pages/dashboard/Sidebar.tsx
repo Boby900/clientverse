@@ -21,7 +21,7 @@ function Sidebar() {
   const apiUrl = import.meta.env.VITE_API_URL;
   const navigate = useNavigate();
 
-  const { isNew, reset} = useBadge(); // Access reset from BadgeContext
+  const { isNew, reset } = useBadge(); // Access reset from BadgeContext
   useEffect(() => {
     if (github_avatar || google_avatar) {
       setUser({
@@ -69,6 +69,7 @@ function Sidebar() {
               </span>
             </Link>
             <button
+              data-testid="collections"
               onClick={handleCollectionsClick} // Use the click handler
               className="p-2 rounded hover:bg-gray-700"
             >
@@ -102,8 +103,8 @@ function Sidebar() {
 
             <a href="#profile" title="Profile" className="mt-[400px]">
               <DropdownMenu>
-                <DropdownMenuTrigger>
-                  <Avatar>
+                <DropdownMenuTrigger data-testid="logout">
+                  <Avatar data-testid="avatar">
                     <AvatarImage
                       src={
                         user?.googleAvatar ||
@@ -116,8 +117,8 @@ function Sidebar() {
                   </Avatar>
                 </DropdownMenuTrigger>
                 <DropdownMenuContent>
-                  <DropdownMenuItem>
-                    <button onClick={logout}>Sign Out</button>
+                  <DropdownMenuItem >
+                    <button data-testid="logoutButton" onClick={logout}>Sign Out</button>
                   </DropdownMenuItem>
                 </DropdownMenuContent>
               </DropdownMenu>
