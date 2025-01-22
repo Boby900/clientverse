@@ -6,7 +6,7 @@ interface CollectionData {
   id: number;
   createdAt: Date | null;
   tableName: string;
-  userId: number;
+  userId?: number;
   selectedFields: string[];
 }
 

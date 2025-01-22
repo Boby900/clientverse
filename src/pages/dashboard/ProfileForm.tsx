@@ -10,8 +10,10 @@ interface ProfileFormProps {
 }
 
 export function ProfileForm({ selectedFields, tableName }: ProfileFormProps) {
+  const fieldsToRender = selectedFields.filter((field) => field !== "created");
+  console.log(fieldsToRender)
   const [formData, setFormData] = useState(
-    selectedFields.reduce((acc, field) => {
+    fieldsToRender.reduce((acc, field) => {
       acc[field] = ""; // Initialize each field with an empty string
       return acc;
     }, {} as Record<string, string>)
@@ -56,7 +58,7 @@ export function ProfileForm({ selectedFields, tableName }: ProfileFormProps) {
 
   return (
     <form onSubmit={handleSubmit} className="space-y-8">
-    {selectedFields.map((field) => (
+    {fieldsToRender.map((field) => (
       <div key={field} className="space-y-2">
         <Label htmlFor={field}>{field}</Label>
         <Input
