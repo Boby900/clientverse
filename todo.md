@@ -10,5 +10,6 @@
 3. fix Avatar, it's being default to shadcn after initial render.
 18. fix the mobile responsiveness
 19. dynamically render the name of the table <SheetTitle>New {tableName} record</SheetTitle>
-
+20. add a carousel, ref => Bookmarks, X.
+21. add a product hunt button, same as X for upvote.
 

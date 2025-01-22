@@ -11,7 +11,6 @@ import {
 import {
   Sheet,
   SheetContent,
-  SheetDescription,
   SheetHeader,
   SheetTitle,
   SheetTrigger,
@@ -63,7 +62,8 @@ function AllCollection() {
         <p>Loading collections...</p>
       ) : data.length > 0 ? (
         data.map((card, index) => {
-          const selectedFields = JSON.parse(card.selectedFields); // Parse selected fields for each card
+          const selectedFields = card.selectedFields; // Parse selected fields for each card
+          console.log(selectedFields)
           return (
             <div key={index}>
               <motion.div
@@ -123,17 +123,13 @@ function AllCollection() {
                       <SheetHeader>
                         <SheetTitle>
                           New{" "}
-                          {(card.tableName || "").replace(
-                            /^collection_|\$/,
-                            ""
-                          )}{" "}
+                          {(card.tableName || "")}{" "}
                           record
                         </SheetTitle>
-                        <SheetDescription>
                           <ProfileForm
                             selectedFields={selectedFields}
+                            tableName={card.tableName}
                           />
-                        </SheetDescription>
                       </SheetHeader>
                     </SheetContent>
                   </Sheet>

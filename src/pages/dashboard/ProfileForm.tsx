@@ -1,69 +1,74 @@
 "use client";
-
-import { zodResolver } from "@hookform/resolvers/zod";
-import { useForm } from "react-hook-form";
-import { z } from "zod";
 import { Button } from "@/components/ui/button";
-import {
-  Form,
-  FormControl,
-  FormField,
-  FormItem,
-  FormLabel,
-  FormMessage,
-} from "@/components/ui/form";
 import { Input } from "@/components/ui/input";
-
-// Create a dynamic schema based on selectedFields
-const generateSchema = (fields: string[]) => {
-  const shape = fields.reduce((acc, field) => {
-    acc[field] = z.string().min(2, `${field} is required`);
-    return acc;
-  }, {} as Record<string, z.ZodTypeAny>);
-
-  return z.object(shape);
-};
-
+import { Label } from "@/components/ui/label";
+import { useState } from "react";
+const apiUrl = import.meta.env.VITE_API_URL;
 interface ProfileFormProps {
   selectedFields: string[];
+  tableName: string
 }
 
-export function ProfileForm({ selectedFields }: ProfileFormProps) {
-  const formSchema = generateSchema(selectedFields);
-
-  const form = useForm({
-    resolver: zodResolver(formSchema),
-    defaultValues: selectedFields.reduce((acc, field) => {
+export function ProfileForm({ selectedFields, tableName }: ProfileFormProps) {
+  const [formData, setFormData] = useState(
+    selectedFields.reduce((acc, field) => {
       acc[field] = ""; // Initialize each field with an empty string
       return acc;
-    }, {} as Record<string, string>),
-  });
+    }, {} as Record<string, string>)
+  );
 
-  const onSubmit = (values: Record<string, string>) => {
-    console.log("Form submitted with values:", values);
+  const handleInputChange = (field: string, value: string) => {
+    setFormData((prev) => ({
+      ...prev,
+      [field]: value,
+    }));
+  };
+  const handleSubmit = async (e: React.FormEvent) => {
+    e.preventDefault();
+
+       // Construct the payload
+       const payload = {
+        tableName, // Use shorthand for concise object syntax
+        formData,
+      };
+  
+      console.log("Payload:", JSON.stringify(payload, null, 2));
+    try {
+      const response = await fetch(`${apiUrl}/api/collection/insert`, {
+        method: "POST",
+        credentials: "include", // Ensures cookies are sent with the request
+        headers: {
+          "Content-Type": "application/json",
+        },
+        body: JSON.stringify(payload), // Send form data
+
+      }
+    );
+    if (response.ok) {
+      console.log("Form submitted successfully", payload);
+    } else {
+      console.error("Failed to submit form");
+    }
+  } catch (error) {
+    console.error("Error:", error);
+  }
   };
 
   return (
-    <Form {...form}>
-      <form onSubmit={form.handleSubmit(onSubmit)} className="space-y-8">
-        {selectedFields.map((fieldName) => (
-          <FormField
-            key={fieldName}
-            control={form.control}
-            name={fieldName}
-            render={({ field }) => (
-              <FormItem>
-                <FormLabel>{fieldName}</FormLabel>
-                <FormControl>
-                  <Input placeholder={`Enter ${fieldName}`} {...field} />
-                </FormControl>
-                <FormMessage />
-              </FormItem>
-            )}
-          />
-        ))}
-        <Button type="submit">Submit</Button>
-      </form>
-    </Form>
+    <form onSubmit={handleSubmit} className="space-y-8">
+    {selectedFields.map((field) => (
+      <div key={field} className="space-y-2">
+        <Label htmlFor={field}>{field}</Label>
+        <Input
+          id={field}
+          name={field}
+          value={formData[field]}
+          onChange={(e) => handleInputChange(field, e.target.value)}
+          placeholder={`Enter ${field}`}
+        />
+      </div>
+    ))}
+    <Button type="submit">Submit</Button>
+  </form>
   );
 }
