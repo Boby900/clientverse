@@ -16,7 +16,7 @@ vi.mock("@/lib/utils", async (importOriginal) => {
         {
           id: "1",
           tableName: "Collection 1",
-          selectedFields: JSON.stringify(["Field 1", "Field 2"]),
+          selectedFields: ["Field 1", "Field 2"],
         },
       ],
       pagination: { totalPages: 1 },
