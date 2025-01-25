@@ -6,8 +6,8 @@ interface CollectionData {
   id: number;
   createdAt: Date | null;
   tableName: string;
-  userId: number;
-  selectedFields: string;
+  userId?: number;
+  selectedFields: string[];
 }
 
 interface PaginationData {
@@ -27,8 +27,19 @@ export const useFetchCollections = () => {
   const [pagination, setPagination] = useState<PaginationData | null>(null);
   const [currentPage, setCurrentPage] = useState(1);
 
-  // Cache for fetched pages
-
+  const transformCollectionData = (collections: CollectionData[]): CollectionData[] => {
+    return collections.map((item) => ({
+      id: item.id,
+      createdAt: item.createdAt ? new Date(item.createdAt) : null,
+      tableName: item.tableName,
+      userId: item.userId,
+      selectedFields: Array.isArray(item.selectedFields)
+        ? item.selectedFields
+        : typeof item.selectedFields === "string"
+        ? JSON.parse(item.selectedFields)
+        : [],
+    }));
+  };
   const fetchData = async (page: number) => {
     setLoading(true);
 
@@ -49,10 +60,10 @@ export const useFetchCollections = () => {
       if (response.ok) {
         const result = await response.json();
         if (result?.collections && result?.pagination) {
-          setData(result.collections);
+          setData(transformCollectionData(result.collections));
           setPagination(result.pagination);
 
-    
+          console.log("Transformed Data:", transformCollectionData(result.collections));
      
         } else {
           console.error("Unexpected data format:", result);

@@ -11,7 +11,6 @@ import {
 import {
   Sheet,
   SheetContent,
-  SheetDescription,
   SheetHeader,
   SheetTitle,
   SheetTrigger,
@@ -35,6 +34,8 @@ import {
 } from "@/components/ui/alert-dialog.tsx";
 import { Badge } from "@/components/ui/badge";
 
+import { ProfileForm } from "@/pages/dashboard/ProfileForm";
+
 function AllCollection() {
   const { scrollYProgress } = useScroll();
   const navigate = useNavigate();
@@ -54,11 +55,6 @@ function AllCollection() {
     handleDelete,
     handlePageChange,
   } = useFetchCollections();
-  console.log(
-    data.map((par) => {
-      return JSON.parse(par.selectedFields);
-    })
-  );
 
   return (
     <div className="grid sm:grid-cols-2 gap-6 p-6  rounded-lg">
@@ -66,8 +62,8 @@ function AllCollection() {
         <p>Loading collections...</p>
       ) : data.length > 0 ? (
         data.map((card, index) => {
-          const selectedFields = JSON.parse(card.selectedFields); // Parse selected fields for each card
-
+          const selectedFields = card.selectedFields; // Parse selected fields for each card
+          console.log(selectedFields)
           return (
             <div key={index}>
               <motion.div
@@ -125,12 +121,15 @@ function AllCollection() {
                     </SheetTrigger>
                     <SheetContent>
                       <SheetHeader>
-                        <SheetTitle>Are you absolutely sure?</SheetTitle>
-                        <SheetDescription>
-                          This action cannot be undone. This will permanently
-                          delete your account and remove your data from our
-                          servers.
-                        </SheetDescription>
+                        <SheetTitle>
+                          New{" "}
+                          {(card.tableName || "")}{" "}
+                          record
+                        </SheetTitle>
+                          <ProfileForm
+                            selectedFields={selectedFields}
+                            tableName={card.tableName}
+                          />
                       </SheetHeader>
                     </SheetContent>
                   </Sheet>
