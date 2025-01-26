@@ -8,6 +8,10 @@ export default {
   ],
   theme: {
   	extend: {
+		fontFamily: {
+			'Playwrite': ['Playwrite IN', 'sans-serif'],
+			'Ubuntu': ['Ubuntu', 'serif']
+		  },
   		borderRadius: {
   			lg: 'var(--radius)',
   			md: 'calc(var(--radius) - 2px)',

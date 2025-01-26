@@ -1,70 +1,44 @@
-import { Button } from "@/components/ui/button";
+import { CandlestickChartIcon as ChartCandlestick, Hammer, Headset } from "lucide-react"
 
-function Page2() {
+function Features() {
+  const features = [
+    {
+      icon: ChartCandlestick,
+      title: "Advanced Analytics",
+      description: "Access analytics for your business in one place",
+    },
+    {
+      icon: Hammer,
+      title: "Premium Support",
+      description: "Receive timely assistance and escalations with our premium support",
+    },
+    {
+      icon: Headset,
+      title: "Premium+ All or",
+      description: "All organizations and affiliates get Premium+ with access to Grok 2.0.",
+    },
+  ]
+
   return (
-    <div className="lg:grid lg:grid-cols-[30%,70%]  min-h-[600px] border border-[#006D75] p-4 m-4 ">
-      {/* Left Column */}
-      <div className="border-2 flex  flex-col gap-4 border-[#004953] bg-[#002c36] text-white m-2 p-2 rounded-md">
-        <a href="#">
-          <div className="p-2 bg-[#00363e] rounded-md">
-            <p className="font-bold text-lg">Realtime database</p>
-            <p className="text-sm">
-              Embedded performant db with schema builder, data validations,
-              realtime subscriptions, and easy-to-use REST API.
-            </p>
+    <div className="max-w-4xl mx-auto p-6">
+      <h3 className="text-center font-bold text-3xl mb-8 ">More Features</h3>
+      <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
+        {features.map((feature, index) => (
+          <div
+            key={index}
+            className=" flex flex-col items-center text-center transition-all duration-300 hover:shadow-lg hover:scale-105"
+          >
+            <div className=" mb-4">
+              <feature.icon absoluteStrokeWidth/>
+            </div>
+            <h4 className="font-semibold text-xl mb-2 ">{feature.title}</h4>
+            <p className="text-gray-400">{feature.description}</p>
           </div>
-        </a>
-        <a href="#">
-        <div className="p-2 bg-[#00363e] rounded-md">
-          <p className="font-bold text-lg">Authentication</p>
-          <p className="text-sm">
-            Manage your app users and handle email/password and OAuth2 sign-ups
-            (Google, GitHub) without the hassle.
-          </p>
-        </div>
-        </a>
-        <a href="#">
-          <div className="p-2 bg-[#00363e] rounded-md">
-            <p className="font-bold text-lg">File Storage</p>
-            <p className="text-sm">
-              Sanely store files locally or in Pinata. Easily attach media to
-              your database records and generate thumbnails on the fly.
-            </p>
-          </div>
-        </a>
-        <a href="#">
-          <div className="p-2 bg-[#00363e] rounded-md">
-            <p className="font-bold text-lg">Dashboard</p>
-            <p className="text-sm">
-              Leverage the power of the Admin Dashboard to control the flow of
-              the data.
-            </p>
-          </div>
-        </a>
-        <a href="#">
-          <div className=" p-2 bg-[#00363e] rounded-md">
-            <p className="font-bold text-lg">Websockets</p>
-            <p className="text-sm">
-              Easily integrate Websockets using Socket.IO for realtime
-              communication between users.
-            </p>
-          </div>
-        </a>
-        <a href="#">
-          <div className=" p-2">
-            <Button className="bg-[#006D75] text-white hover:bg-[#004953]">
-              Explore all features
-            </Button>
-          </div>
-        </a>
-      </div>
-
-      {/* Right Column */}
-      <div className="border-2 min-h-[200px] bg-[url('/page2.png')] bg-cover bg-center border-[#004953]  text-white m-2 p-2 rounded-md">
-      
+        ))}
       </div>
     </div>
-  );
+  )
 }
 
-export default Page2;
+export default Features
+

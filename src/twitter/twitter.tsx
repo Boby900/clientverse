@@ -16,10 +16,10 @@ const TwitterShareButton: React.FC<TwitterShareButtonProps> = ({ text, url, hash
       href={twitterShareUrl}
       target="_blank"
       rel="noopener noreferrer"
-      className="flex items-center bg-gray-900 text-white px-4 py-2 rounded-md hover:bg-gray-600"
+      className="flex items-center bg-gray-900 text-white px-4 py-2 rounded-md hover:bg-gray-800"
     >
-      <Twitter />
-      Share on Twitter
+     
+      Share on  <span className="pl-1"><Twitter /></span>
     </a>
   );
 };
