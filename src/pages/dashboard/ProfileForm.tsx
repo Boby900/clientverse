@@ -11,13 +11,13 @@ interface ProfileFormProps {
 
 export function ProfileForm({ selectedFields, tableName }: ProfileFormProps) {
   const fieldsToRender = selectedFields.filter((field) => field !== "created");
-  console.log(fieldsToRender)
-  const [formData, setFormData] = useState(
-    fieldsToRender.reduce((acc, field) => {
-      acc[field] = ""; // Initialize each field with an empty string
-      return acc;
-    }, {} as Record<string, string>)
-  );
+// Initialize formData with empty strings for each field
+const initialFormData = fieldsToRender.reduce((acc, field) => {
+  acc[field] = ""; // Initialize each field with an empty string
+  return acc;
+}, {} as Record<string, string>);
+  const [formData, setFormData] = useState(initialFormData);
+  const [loading, setLoading] = useState(false); // State to track loading
 
   const handleInputChange = (field: string, value: string) => {
     setFormData((prev) => ({
@@ -27,6 +27,7 @@ export function ProfileForm({ selectedFields, tableName }: ProfileFormProps) {
   };
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
+    setLoading(true); // Set loading to true when submission starts
 
        // Construct the payload
        const payload = {
@@ -47,12 +48,17 @@ export function ProfileForm({ selectedFields, tableName }: ProfileFormProps) {
       }
     );
     if (response.ok) {
-      console.log("Form submitted successfully", payload);
+      console.log("Form submitted successfully", payload)
+      setFormData(initialFormData); // Reset form data to initial state
+      ;
     } else {
       console.error("Failed to submit form");
     }
   } catch (error) {
     console.error("Error:", error);
+  }
+  finally {
+    setLoading(false); // Set loading to false after submission completes
   }
   };
 
@@ -70,7 +76,9 @@ export function ProfileForm({ selectedFields, tableName }: ProfileFormProps) {
         />
       </div>
     ))}
-    <Button type="submit">Submit</Button>
+    <Button type="submit" disabled={loading}>
+    {loading ? "Submitting..." : "Submit"} {/* Show loading text */}
+    </Button>
   </form>
   );
 }

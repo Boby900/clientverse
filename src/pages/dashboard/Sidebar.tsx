@@ -55,11 +55,11 @@ function Sidebar() {
 
   return (
     <div>
-      <div className="p-4 border-4 m-2 text-center">
+      <div className="p-4  m-2 text-center">
         This is a demo of Clientverse admin dashboard. The database resets every
         hour. Realtime data and file upload are disabled.
       </div>
-      <div className="flex border-4 m-4 p-4">
+      <div className="flex m-4 p-4">
         {/* Sidebar */}
         <div className="sm:w-24 w-34 bg-gray-950 text-white flex flex-col">
           <nav className="flex flex-col gap-2 p-4">
