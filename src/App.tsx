@@ -12,6 +12,7 @@ import { TableDemo } from "./pages/dashboard/Home";
 import AllCollection from "./pages/dashboard/AllCollection";
 import Pinata from "./pages/dashboard/uploadPinata";
 import EditCard from "./pages/dashboard/EditCard";
+import { Pricing } from "./pages/Pricing";
 
 function App() {
   return (
@@ -32,6 +33,8 @@ function App() {
         <Route path="*" element={<ErrorPage />} />
         <Route path="/signup" element={<SignUp />} />
         <Route path="/login" element={<Login />} />
+        <Route path="/pricing" element={<Pricing />}/>
+
         <Route path="/dashboard" element={<Sidebar />}>
           <Route index element={<TableDemo />} /> {/* Default child route */}
           <Route path="collections" element={<AllCollection />} />

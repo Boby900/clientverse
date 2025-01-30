@@ -61,7 +61,8 @@ export function NewCollection() {
   };
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
-  
+    console.log(typeof name)
+
     const payload = { name, fields: selectedFields};
     setLoading(true); // Start spinner
     try {
@@ -78,7 +79,8 @@ export function NewCollection() {
       });
   
       const data = await response.json();
-  
+      console.log(typeof name)
+
       if (response.ok) {
         console.log(data.message); // Success message
         // Optionally, clear the form or show a success notification

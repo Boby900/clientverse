@@ -62,8 +62,6 @@ export const useFetchCollections = () => {
         if (result?.collections && result?.pagination) {
           setData(transformCollectionData(result.collections));
           setPagination(result.pagination);
-
-          console.log("Transformed Data:", transformCollectionData(result.collections));
      
         } else {
           console.error("Unexpected data format:", result);

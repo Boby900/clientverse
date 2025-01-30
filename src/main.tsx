@@ -9,12 +9,12 @@ import { UserProvider } from "./hooks/userContext.tsx";
 createRoot(document.getElementById("root")!).render(
   <StrictMode>
     <BrowserRouter>
-      <UserProvider>
-        <BadgeProvider>
-          <App />
-        </BadgeProvider>
-      </UserProvider>
-      <Toaster />
+        <UserProvider>
+          <BadgeProvider>
+            <App />
+          </BadgeProvider>
+        </UserProvider>
+        <Toaster />
     </BrowserRouter>
   </StrictMode>
 );

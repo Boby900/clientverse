@@ -9,5 +9,5 @@
 17. fix the caching in the table demo component, implement it.
 3. fix Avatar, it's being default to shadcn after initial render.
 18. fix the mobile responsiveness
-
+19. add shadcn's image in the userReview section, instead of unsplash for block pr, ref for image = Avatar comp
 
