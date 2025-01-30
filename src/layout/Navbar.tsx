@@ -1,12 +1,13 @@
 "use client";
-
 import {
   DropdownMenuContent,
   DropdownMenuItem,
   DropdownMenuSeparator,
 } from "@/components/ui/dropdown-menu";
 import { Input } from "@/components/ui/input";
+import { Pricing } from "@/pages/Pricing";
 import TwitterShareButton from "@/twitter/twitter";
+
 import {
   DropdownMenu,
   DropdownMenuTrigger,
@@ -15,9 +16,7 @@ import { Check, FlameIcon, Github, Menu } from "lucide-react";
 
 function Navbar() {
   return (
-    <div
-      className={`font-Ubuntu `}
-    >
+    <div className={`font-Ubuntu `}>
       <nav className="sticky top-0 z-50">
         <ul
           className="flex max-w-full gap-0 sm:gap-4 items-center justify-between 
@@ -58,16 +57,15 @@ function Navbar() {
           {/* Desktop Navigation Links */}
           <div className="hidden lg:flex items-center space-x-4">
             <li>
-              <a
-                href="#"
+              <div
                 className="
               hover:text-primary 
               hover:underline 
               underline-offset-4 
               transition-all duration-300"
               >
-                Pricing
-              </a>
+                <Pricing />
+              </div>
             </li>
             <li>
               <a

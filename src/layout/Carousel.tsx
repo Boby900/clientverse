@@ -11,7 +11,7 @@ const BrandCarousel = () => {
   return (
     <div className="relative overflow-hidden w-full py-8 bg-background/5">
       <motion.div
-        className="flex"
+        className="flex sm:min-w-[200%]"
         animate={{
           x: ['0%', '-100%'],
           transition: {
@@ -24,7 +24,7 @@ const BrandCarousel = () => {
         {brands.concat(brands).map((brand, index) => (
           <div 
             key={index} 
-            className="flex-shrink-0 mx-[6em] p-4 my-4 grayscale hover:grayscale-0 transition-all duration-300"
+            className="flex-shrink-0 mx-[1em] sm:mx-[6em] p-4 my-4 grayscale hover:grayscale-0 transition-all duration-300"
           >
              {brand.logo ? (
               <img 

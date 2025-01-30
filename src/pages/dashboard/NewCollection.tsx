@@ -20,7 +20,7 @@ import { useFetchCollections } from "@/lib/utils";
 import { LoaderCircle } from "lucide-react";
 import { useBadge } from "@/hooks/badgeContext";
 import { z, ZodError} from "zod";
-
+import { useNavigate } from "react-router";
 
 const AVAILABLE_FIELDS = [
   { id: "created", label: "Created" },
@@ -35,6 +35,7 @@ const FormSchema = z.object({
 });
 
 export function NewCollection() {
+  const navigate = useNavigate();
   const [name, setName] = useState(""); // State for name
   const [validationError, setValidationError] = useState<string | null>(null); // State for validation error
   const [selectedFields, setSelectedFields] = useState<string[]>([]);
@@ -44,7 +45,7 @@ export function NewCollection() {
   const { toast } = useToast()
   const { setNew } = useBadge();  // Get the `setNew` function from context
 
-  const {fetchData, currentPage } = useFetchCollections();
+  const {fetchData, currentPage} = useFetchCollections();
 
   const handleNameChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     setName(e.target.value);
@@ -60,7 +61,8 @@ export function NewCollection() {
   };
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
-  
+    console.log(typeof name)
+
     const payload = { name, fields: selectedFields};
     setLoading(true); // Start spinner
     try {
@@ -77,13 +79,13 @@ export function NewCollection() {
       });
   
       const data = await response.json();
-  
+      console.log(typeof name)
+
       if (response.ok) {
         console.log(data.message); // Success message
         // Optionally, clear the form or show a success notification
         console.log(currentPage)
         await fetchData(currentPage);
-
         setNew(); // This triggers the "New" state to be shown
         setName("");
         setSelectedFields([]);
@@ -92,6 +94,8 @@ export function NewCollection() {
           title: "collection created successfully.",
           variant: "default"
         })
+        navigate("/dashboard/collections"); // Navigate to collections
+
       } else {
         console.error(data.error); // Error message
       }
