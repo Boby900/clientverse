@@ -23,11 +23,17 @@ function Sidebar() {
 
   const { isNew, reset } = useBadge(); // Access reset from BadgeContext
   useEffect(() => {
-    if (github_avatar || google_avatar) {
-      setUser({
+    const storedUser = localStorage.getItem("user");
+    if (storedUser) {
+      setUser(JSON.parse(storedUser));
+    } 
+    else if (github_avatar || google_avatar) {
+      const newUser = {
         githubAvatar: github_avatar || undefined,
         googleAvatar: google_avatar || undefined,
-      });
+      };
+      setUser(newUser);
+      localStorage.setItem("user", JSON.stringify(newUser));
     }
   }, [github_avatar, google_avatar, setUser]);
   async function logout() {
@@ -42,6 +48,8 @@ function Sidebar() {
       });
 
       if (response.ok) {
+        localStorage.removeItem("user");
+        setUser(null);
         navigate("/");
       }
     } catch (error) {
