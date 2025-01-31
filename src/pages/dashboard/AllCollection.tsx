@@ -63,7 +63,6 @@ function AllCollection() {
       ) : data.length > 0 ? (
         data.map((card, index) => {
           const selectedFields = card.selectedFields; // Parse selected fields for each card
-          console.log(selectedFields)
           return (
             <div key={index}>
               <motion.div
