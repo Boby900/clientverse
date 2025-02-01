@@ -13,6 +13,7 @@ import { useBadge } from "@/hooks/badgeContext";
 import { Badge } from "@/components/ui/badge";
 import { useEffect } from "react";
 import { useUser } from "@/hooks/userContext";
+
 function Sidebar() {
   const { setUser, user } = useUser();
   const [params] = useSearchParams();
@@ -26,8 +27,7 @@ function Sidebar() {
     const storedUser = localStorage.getItem("user");
     if (storedUser) {
       setUser(JSON.parse(storedUser));
-    } 
-    else if (github_avatar || google_avatar) {
+    } else if (github_avatar || google_avatar) {
       const newUser = {
         githubAvatar: github_avatar || undefined,
         googleAvatar: google_avatar || undefined,
@@ -36,6 +36,7 @@ function Sidebar() {
       localStorage.setItem("user", JSON.stringify(newUser));
     }
   }, [github_avatar, google_avatar, setUser]);
+
   async function logout() {
     // Logout logic
     try {
@@ -56,60 +57,64 @@ function Sidebar() {
       console.error("Error:", error);
     }
   }
+
   const handleCollectionsClick = () => {
     reset(); // Reset the "New" state
     navigate("/dashboard/collections"); // Navigate to collections
   };
 
   return (
-    <div>
-      <div className="p-4  m-2 text-center">
+    <div className="flex flex-col h-screen">
+      <div className="p-4 m-2 text-center">
         This is a demo of Clientverse admin dashboard. The database resets every
         hour. Realtime data and file upload are disabled.
       </div>
-      <div className="flex m-4 p-4">
+      <div className="flex flex-1">
         {/* Sidebar */}
         <div className="sm:w-24 w-34 bg-gray-950 text-white flex flex-col">
-          <nav className="flex flex-col gap-2 p-4">
-            <Link to="/dashboard" className="p-2 rounded hover:bg-gray-700">
-              <span title="Home">
-                <Squirrel size={32} />
-              </span>
-            </Link>
-            <button
-              data-testid="collections"
-              onClick={handleCollectionsClick} // Use the click handler
-              className="p-2 rounded hover:bg-gray-700"
-            >
-              <span title="Collections">
-                <Database size={32} />
-                {isNew && <Badge>New</Badge>}{" "}
-                {/* Show "New" if isNew is true */}
-              </span>
-            </button>
-            <Link
-              to="/dashboard/logs"
-              className="p-2 rounded hover:bg-gray-700"
-            >
-              <span title="Logs">
-                <ChartSpline size={32} />
-              </span>
-            </Link>
-            <Link
-              to="/dashboard/settings"
-              className="p-2 rounded hover:bg-gray-700"
-            >
-              <span title="Settings">
-                <File size={32} />
-              </span>
-            </Link>
-            <button className="p-2 rounded hover:bg-gray-700">
-              <span title="Make a new collection">
-                <NewCollection />
-              </span>
-            </button>
+          <nav className="flex flex-col gap-4 items-center p-4 h-full">
+            {/* Top Section */}
+            <div className="flex flex-col gap-4 items-center">
+              <Link to="/dashboard" className="p-2 rounded hover:bg-gray-700">
+                <span title="Home">
+                  <Squirrel size={32} />
+                </span>
+              </Link>
+              <button
+                data-testid="collections"
+                onClick={handleCollectionsClick}
+                className="p-2 rounded hover:bg-gray-700"
+              >
+                <span title="Collections">
+                  <Database size={32} />
+                  {isNew && <Badge>New</Badge>}
+                </span>
+              </button>
+              <Link
+                to="/dashboard/logs"
+                className="p-2 rounded hover:bg-gray-700"
+              >
+                <span title="Logs">
+                  <ChartSpline size={32} />
+                </span>
+              </Link>
+              <Link
+                to="/dashboard/settings"
+                className="p-2 rounded hover:bg-gray-700"
+              >
+                <span title="Settings">
+                  <File size={32} />
+                </span>
+              </Link>
+              <button className="p-2 rounded hover:bg-gray-700">
+                <span title="Make a new collection">
+                  <NewCollection />
+                </span>
+              </button>
+            </div>
 
-            <a href="#profile" title="Profile" className="mt-[400px]">
+            {/* Profile Section */}
+            <div className="mt-auto">
               <DropdownMenu>
                 <DropdownMenuTrigger data-testid="logout">
                   <Avatar data-testid="avatar">
@@ -125,17 +130,19 @@ function Sidebar() {
                   </Avatar>
                 </DropdownMenuTrigger>
                 <DropdownMenuContent>
-                  <DropdownMenuItem >
-                    <button data-testid="logoutButton" onClick={logout}>Sign Out</button>
+                  <DropdownMenuItem>
+                    <button data-testid="logoutButton" onClick={logout}>
+                      Sign Out
+                    </button>
                   </DropdownMenuItem>
                 </DropdownMenuContent>
               </DropdownMenu>
-            </a>
+            </div>
           </nav>
         </div>
+
         {/* Main Content */}
-        <div className="m-6 p-6 w-screen">
-          {/* Use <Outlet /> to render child components */}
+        <div className="flex-1 m-6 p-6 overflow-auto">
           <Outlet />
         </div>
       </div>
