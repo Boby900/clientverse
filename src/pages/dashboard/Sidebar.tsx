@@ -1,7 +1,8 @@
+import { useEffect } from "react";
+import { Link, useNavigate, Outlet, useSearchParams } from "react-router";
+import { motion } from "framer-motion";
+import { BarChartIcon as ChartSpline, Database, File, Squirrel, LogOut } from 'lucide-react';
 import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
-import { ChartSpline, Database, File, Squirrel } from "lucide-react";
-import { Outlet, useSearchParams } from "react-router"; // Import useSearchParams
-import { Link, useNavigate } from "react-router"; // Import Link
 import {
   DropdownMenu,
   DropdownMenuContent,
@@ -11,8 +12,14 @@ import {
 import { NewCollection } from "./NewCollection";
 import { useBadge } from "@/hooks/badgeContext";
 import { Badge } from "@/components/ui/badge";
-import { useEffect } from "react";
 import { useUser } from "@/hooks/userContext";
+
+const menuItems = [
+  { icon: Squirrel, title: "Home", path: "/dashboard" },
+  { icon: Database, title: "Collections", path: "/dashboard/collections" },
+  { icon: ChartSpline, title: "Logs", path: "/dashboard/logs" },
+  { icon: File, title: "Settings", path: "/dashboard/settings" },
+];
 
 function Sidebar() {
   const { setUser, user } = useUser();
@@ -21,8 +28,8 @@ function Sidebar() {
   const google_avatar = params.get("google_avatar");
   const apiUrl = import.meta.env.VITE_API_URL;
   const navigate = useNavigate();
+  const { isNew, reset } = useBadge();
 
-  const { isNew, reset } = useBadge(); // Access reset from BadgeContext
   useEffect(() => {
     const storedUser = localStorage.getItem("user");
     if (storedUser) {
@@ -37,15 +44,12 @@ function Sidebar() {
     }
   }, [github_avatar, google_avatar, setUser]);
 
-  async function logout() {
-    // Logout logic
+  const logout = async () => {
     try {
       const response = await fetch(`${apiUrl}/api/auth/logout`, {
         method: "POST",
-        credentials: "include", // Ensures cookies are sent with the request
-        headers: {
-          "Content-Type": "application/json",
-        },
+        credentials: "include",
+        headers: { "Content-Type": "application/json" },
       });
 
       if (response.ok) {
@@ -56,95 +60,68 @@ function Sidebar() {
     } catch (error) {
       console.error("Error:", error);
     }
-  }
+  };
 
   const handleCollectionsClick = () => {
-    reset(); // Reset the "New" state
-    navigate("/dashboard/collections"); // Navigate to collections
+    reset();
+    navigate("/dashboard/collections");
   };
 
   return (
-    <div className="flex flex-col h-screen">
-      <div className="p-4 m-2 text-center">
-        This is a demo of Clientverse admin dashboard. The database resets every
-        hour. Realtime data and file upload are disabled.
+    <div className="flex flex-col min-h-screen bg-gradient-to-b from-gray-900 to-black text-gray-300">
+      <div className="p-4 text-center  text-gray-200 bg-gray-800 border-b border-gray-700">
+        This is a demo of Clientverse admin dashboard. The database resets every hour. Realtime data and file upload are disabled.
       </div>
       <div className="flex flex-1">
-        {/* Sidebar */}
-        <div className="sm:w-24 w-34 bg-gray-950 text-white flex flex-col">
-          <nav className="flex flex-col gap-4 items-center p-4 h-full">
-            {/* Top Section */}
-            <div className="flex flex-col gap-4 items-center">
-              <Link to="/dashboard" className="p-2 rounded hover:bg-gray-700">
-                <span title="Home">
-                  <Squirrel size={32} />
-                </span>
-              </Link>
-              <button
-                data-testid="collections"
-                onClick={handleCollectionsClick}
-                className="p-2 rounded hover:bg-gray-700"
-              >
-                <span title="Collections">
-                  <Database size={32} />
-                  {isNew && <Badge>New</Badge>}
-                </span>
-              </button>
-              <Link
-                to="/dashboard/logs"
-                className="p-2 rounded hover:bg-gray-700"
-              >
-                <span title="Logs">
-                  <ChartSpline size={32} />
-                </span>
-              </Link>
-              <Link
-                to="/dashboard/settings"
-                className="p-2 rounded hover:bg-gray-700"
-              >
-                <span title="Settings">
-                  <File size={32} />
-                </span>
-              </Link>
-              <button className="p-2 rounded hover:bg-gray-700">
-                <span title="Make a new collection">
+        <aside className="w-20 sm:w-64 bg-gradient-to-r from-gray-900 to-gray-800 border-r border-gray-700">
+          <nav className="flex flex-col h-full py-6">
+            <div className="space-y-2">
+              {menuItems.map((item) => (
+                <motion.div key={item.title} whileHover={{ scale: 1.05 }} whileTap={{ scale: 0.95 }}>
+                  <Link
+                    to={item.path}
+                    className="flex items-center px-4 py-3 text-gray-300 hover:bg-gray-800 hover:text-gray-100 rounded-lg transition-colors duration-200"
+                    onClick={item.title === "Collections" ? handleCollectionsClick : undefined}
+                  >
+                    <item.icon className="h-6 w-6 mr-4" />
+                    <span className="hidden sm:inline">{item.title}</span>
+                    {item.title === "Collections" && isNew && (
+                      <Badge className="ml-auto bg-blue-600 text-gray-100">New</Badge>
+                    )}
+                  </Link>
+                </motion.div>
+              ))}
+              <motion.div whileHover={{ scale: 1.05 }} whileTap={{ scale: 0.95 }}>
+                <button className="w-full flex items-center px-2  text-gray-300 hover:bg-gray-800 hover:text-gray-100 rounded-lg transition-colors duration-200">
                   <NewCollection />
-                </span>
-              </button>
+                </button>
+              </motion.div>
             </div>
-
-            {/* Profile Section */}
             <div className="mt-auto">
               <DropdownMenu>
-                <DropdownMenuTrigger data-testid="logout">
-                  <Avatar data-testid="avatar">
+                <DropdownMenuTrigger className="flex items-center w-full px-4 py-3 text-gray-300 hover:bg-gray-800 hover:text-gray-100 rounded-lg transition-colors duration-200">
+                  <Avatar className="h-8 w-8 mr-4">
                     <AvatarImage
-                      src={
-                        user?.googleAvatar ||
-                        user?.githubAvatar ||
-                        "https://github.com/shadcn.png"
-                      }
+                      src={user?.googleAvatar || user?.githubAvatar || "https://github.com/shadcn.png"}
                       alt="User Avatar"
                     />
                     <AvatarFallback>CN</AvatarFallback>
                   </Avatar>
+                  <span className="hidden sm:inline">Profile</span>
                 </DropdownMenuTrigger>
-                <DropdownMenuContent>
-                  <DropdownMenuItem>
-                    <button data-testid="logoutButton" onClick={logout}>
-                      Sign Out
-                    </button>
+                <DropdownMenuContent className="bg-gray-800 border-gray-700 text-gray-300">
+                  <DropdownMenuItem onClick={logout} className="hover:bg-gray-700 focus:bg-gray-700">
+                    <LogOut className="mr-2 h-4 w-4 cursor-pointer" />
+                    <span className="cursor-pointer">Sign Out</span>
                   </DropdownMenuItem>
                 </DropdownMenuContent>
               </DropdownMenu>
             </div>
           </nav>
-        </div>
-
-        {/* Main Content */}
-        <div className="flex-1 m-6 p-6 overflow-auto">
+        </aside>
+        <main className="flex-1 p-6 overflow-auto bg-gray-900">
           <Outlet />
-        </div>
+        </main>
       </div>
     </div>
   );
