@@ -1,13 +1,9 @@
 3. more test cases using the vitest and React testing library.
-7. add lazy loading  to improve performance.
-8. Stripe integration
-9. some eslint rules.
 10. shift to cloudfare, gcp or AWS.
 12. add password recovery for the email auth.
-15. fix the cors error in the prod when uploading files to pinata, using node.js.
+15. fetch and render files uploaded to pinata.
 16. add the authorization to the /dashboard client side route.
 17. fix the caching in the table demo component, implement it.
-3. fix Avatar, it's being default to shadcn after initial render.
-18. fix the mobile responsiveness
 19. add shadcn's image in the userReview section, instead of unsplash for block pr, ref for image = Avatar comp
+20. every time there is new deployement there should be a new alert, via webhook.
 

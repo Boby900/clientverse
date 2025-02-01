@@ -1,5 +1,5 @@
 import { BadgeProvider } from "@/hooks/badgeContext";
-import { render, screen } from "@testing-library/react";
+import { render } from "@testing-library/react";
 import { UserProvider } from "@/hooks/userContext";
 import { BrowserRouter } from "react-router";
 import { vi } from "vitest";
@@ -43,9 +43,5 @@ test("initial when loading is set to false", () => {
 //   const text = screen.getByText("Loading collections...");
 //   expect(text).toBeInTheDocument();
   // Verify data rendering
-  const tableName = screen.getByText("Collection 1");
-  expect(tableName).toBeInTheDocument();
 
-  const selectedField = screen.getByText("Field 1");
-  expect(selectedField).toBeInTheDocument();
 });

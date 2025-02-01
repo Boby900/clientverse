@@ -1,4 +1,4 @@
-import { useParams } from "react-router"; // Import useParams
+import { useParams } from "react-router";
 import { useEffect, useState } from "react";
 import {
   Table,
@@ -7,22 +7,30 @@ import {
   TableHead,
   TableHeader,
   TableRow,
-} from "@/components/ui/table"; // Import table components
-// import { useFetchCollections } from "@/lib/utils"; // Import your data fetching hook
-interface CardData {
-  id: number;
-  createdAt: string; // Adjust based on your actual data type
-  tableName: string;
-  userId: string; // Adjust based on your actual data type
-  selectedFields: string;
-  author: string;
-}
-function EditCard() {
-  const { id } = useParams(); // Get the card ID from the URL
-  const [cardData, setCardData] = useState<CardData | null>(null); // State to hold card data
-  const [loading, setLoading] = useState(true); // Loading state
+} from "@/components/ui/table";
 
-  // const { fetchData } = useFetchCollections(); // Fetch collections hook
+interface TableRow {
+  id: string;
+  [key: string]: string;
+}
+
+interface Metadata {
+  id: number;
+  userId: string;
+  tableName: string;
+  selectedFields: string;
+  createdAt: string;
+}
+
+interface ApiResponse {
+  tableData: TableRow[];
+  metadata: Metadata[];
+}
+
+function EditCard() {
+  const { id } = useParams();
+  const [data, setData] = useState<ApiResponse | null>(null);
+  const [loading, setLoading] = useState(true);
 
   useEffect(() => {
     const fetchCardData = async () => {
@@ -35,14 +43,11 @@ function EditCard() {
             "Content-Type": "application/json",
           },
           credentials: "include",
-        }); // Fetch card data by ID
+        });
+
         if (response.ok) {
-          const result =  await response.json();
-          console.log("Fetched card data:", result);
-          // Access the first item in the data array
-          const data: CardData = result.data.data[0]; 
-          console.log(data)
-          setCardData(data); // Set the card data
+          const result = await response.json();
+          setData(result);
         } else {
           console.error("Failed to fetch card data");
         }
@@ -55,41 +60,47 @@ function EditCard() {
 
     fetchCardData();
   }, [id]);
-  // const selectedFields: string[] = [];
-  if (loading) return <p>Loading card details...</p>;
-  // Debugging: Check if cardData is defined and log selectedFields
-  // console.log("Card Data:", cardData);
-  // if (cardData) {
-  //   console.log("Selected Fields:", cardData.selectedFields);
-  // }
+
+  if (loading) {
+    return <div className="p-4 text-center">Loading card details...</div>;
+  }
+
+  if (!data) {
+    return <div className="p-4 text-center">No data available</div>;
+  }
+
+  // Parse the selectedFields from metadata
+  const columns = data.metadata[0]?.selectedFields
+    ? JSON.parse(data.metadata[0].selectedFields)
+    : [];
+
+  // Add ID column as it's always present
+  if (!columns.includes("id")) {
+    columns.unshift("id");
+  }
 
   return (
-    <div>
-      {/* Render the dynamic table */}
+    <div className="p-4">
       <Table>
         <TableHeader>
           <TableRow>
-            <TableHead>ID</TableHead>         
-            {
-            
-            cardData && JSON.parse(cardData.selectedFields).map(
-              (
-                field: string,
-                index: string // Use optional chaining
-              ) => (
-                <TableHead key={index}>{field}</TableHead> // Render dynamic headers
-              )
-            )
-           }
+            {columns.map((column: string) => (
+              <TableHead key={column} className="capitalize">
+                {column.replace(/([A-Z])/g, " $1").trim()}
+              </TableHead>
+            ))}
           </TableRow>
         </TableHeader>
         <TableBody>
-          <TableRow>
-            <TableCell>{cardData?.id}</TableCell>
-            <TableCell>{cardData?.author}</TableCell>
-            {/* <TableCell>{cardData?.selectedFields.join(", ")}</TableCell>{" "} */}
-            {/* Assuming selectedFields is an array */}
-          </TableRow>
+          {data.tableData.map((row) => (
+            <TableRow key={row.id}>
+              {columns.map((column: string) => (
+                <TableCell key={`${row.id}-${column}`}>
+                  {row[column] || "N/A"}
+                </TableCell>
+              ))}
+            </TableRow>
+          ))}
         </TableBody>
       </Table>
     </div>

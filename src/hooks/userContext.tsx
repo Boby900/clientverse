@@ -13,7 +13,9 @@ export const UserContext = createContext<{
 export const UserProvider: React.FC<{ children: React.ReactNode }> = ({
   children,
 }) => {
-  const [user, setUser] = useState<User | null>(null); // State to hold user info
+  const storedUser = localStorage.getItem("user");
+  const initialUser = storedUser ? JSON.parse(storedUser) : null;
+  const [user, setUser] = useState<User | null>(initialUser); // State to hold user info
 
   return (
     <UserContext.Provider value={{ user, setUser }}>
