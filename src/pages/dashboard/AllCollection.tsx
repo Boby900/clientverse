@@ -62,13 +62,9 @@ function AllCollection() {
 
   console.log("Role Data:", roleData);
 
-  if (!role) {
-    return "role is possibly null";
-  }
-
   return (
     <div className="grid sm:grid-cols-2 gap-6 p-6  rounded-lg">
-      {loading ? (
+      {loading || roleData === null ? (
         <p>Loading collections...</p>
       ) : data.length > 0 ? (
         data.map((card, index) => {
