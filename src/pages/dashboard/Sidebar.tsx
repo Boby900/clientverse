@@ -18,7 +18,7 @@ const menuItems = [
   { icon: Squirrel, title: "Home", path: "/dashboard" },
   { icon: Database, title: "Collections", path: "/dashboard/collections" },
   { icon: ChartSpline, title: "Logs", path: "/dashboard/logs" },
-  { icon: File, title: "Settings", path: "/dashboard/settings" },
+  { icon: File, title: "File Upload", path: "/dashboard/settings" },
 ];
 
 function Sidebar() {

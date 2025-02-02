@@ -34,10 +34,13 @@ import {
 import { Badge } from "@/components/ui/badge";
 
 import { ProfileForm } from "@/pages/dashboard/ProfileForm";
+import { useRole } from "@/hooks/roleContext";
+import { useEffect, useState } from "react";
 
 function AllCollection() {
+  const [roleData, setRoleData] = useState<"admin" | "viewer" | null>(null);
+
   const navigate = useNavigate();
- 
 
   const {
     data,
@@ -50,6 +53,19 @@ function AllCollection() {
     handlePageChange,
   } = useFetchCollections();
 
+  const role = useRole();
+  useEffect(() => {
+    if (role?.role) {
+      setRoleData(role.role);
+    }
+  }, [role]); // Run effect when `role` changes
+
+  console.log("Role Data:", roleData);
+
+  if (!role) {
+    return "role is possibly null";
+  }
+
   return (
     <div className="grid sm:grid-cols-2 gap-6 p-6  rounded-lg">
       {loading ? (
@@ -59,7 +75,6 @@ function AllCollection() {
           const selectedFields = card.selectedFields; // Parse selected fields for each card
           return (
             <div key={index}>
-             
               <Card className="overflow-hidden transition-all duration-300 hover:shadow-lg">
                 <CardHeader className="relative overflow-hidden pb-8">
                   <div className="absolute inset-0 bg-gradient-to-r from-primary to-primary-foreground opacity-10"></div>
@@ -104,22 +119,24 @@ function AllCollection() {
                     <SheetContent>
                       <SheetHeader>
                         <SheetTitle>
-                          New{" "}
-                          {(card.tableName || "")}{" "}
-                          record
+                          New {card.tableName || ""} record
                         </SheetTitle>
-                          <ProfileForm
-                            selectedFields={selectedFields}
-                            tableName={card.tableName}
-                          />
+                        <ProfileForm
+                          selectedFields={selectedFields}
+                          tableName={card.tableName}
+                        />
                       </SheetHeader>
                     </SheetContent>
                   </Sheet>
                   <AlertDialog>
                     <AlertDialogTrigger>
-                      <div className="inline-flex items-center justify-center rounded-md text-sm font-medium ring-offset-background transition-colors focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2 disabled:pointer-events-none disabled:opacity-50 bg-destructive text-destructive-foreground hover:bg-destructive/90 h-8 px-4 py-2">
-                        Delete <Trash2 size={16} />
-                      </div>
+                      {roleData === "viewer" ? (
+                        ""
+                      ) : (
+                        <div className="inline-flex items-center justify-center rounded-md text-sm font-medium ring-offset-background transition-colors focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2 disabled:pointer-events-none disabled:opacity-50 bg-destructive text-destructive-foreground hover:bg-destructive/90 h-8 px-4 py-2">
+                          Delete <Trash2 size={16} />
+                        </div>
+                      )}
                     </AlertDialogTrigger>
                     <AlertDialogContent>
                       <AlertDialogHeader>

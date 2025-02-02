@@ -6,15 +6,18 @@ import App from "./App.tsx";
 import { Toaster } from "@/components/ui/toaster";
 import { BadgeProvider } from "./hooks/badgeContext.tsx";
 import { UserProvider } from "./hooks/userContext.tsx";
+import { RoleProvider } from "./hooks/roleContext.tsx";
 createRoot(document.getElementById("root")!).render(
   <StrictMode>
     <BrowserRouter>
-        <UserProvider>
-          <BadgeProvider>
+      <UserProvider>
+        <BadgeProvider>
+          <RoleProvider>
             <App />
-          </BadgeProvider>
-        </UserProvider>
-        <Toaster />
+          </RoleProvider>
+        </BadgeProvider>
+      </UserProvider>
+      <Toaster />
     </BrowserRouter>
   </StrictMode>
 );
