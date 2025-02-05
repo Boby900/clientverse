@@ -15,6 +15,7 @@ import { Button } from "@/components/ui/button";
 import { Trash2 } from "lucide-react";
 import { SkeletonCard } from "./Skeleton";
 import { Checkbox } from "@/components/ui/checkbox";
+import { handleUserDelete } from "@/lib/del-user";
 
 type User = {
   id: number;
@@ -29,31 +30,7 @@ export function TableDemo() {
   const [loading, setLoading] = useState(true);
   const [selectedRows, setSelectedRows] = useState<number[]>([]);
 
-  // Handle select all checkbox
-  const handleSelectAll = (checked: boolean) => {
-    if (checked) {
-      setSelectedRows(userData.map((user) => user.id));
-    } else {
-      setSelectedRows([]);
-    }
-  };
 
-  // Handle individual row selection
-  const handleSelectRow = (checked: boolean, id: number) => {
-    if (checked) {
-      setSelectedRows((prev) => [...prev, id]);
-    } else {
-      setSelectedRows((prev) => prev.filter((rowId) => rowId !== id));
-    }
-  };
-
-  // Handle delete selected rows
-  const handleDelete = () => {
-    // Add your delete logic here
-    console.log("Deleting rows:", selectedRows);
-  };
-
-  useEffect(() => {
     const fetchData = async () => {
       setLoading(true);
       try {
@@ -73,8 +50,36 @@ export function TableDemo() {
         setLoading(false);
       }
     };
-    fetchData();
-  }, []);
+ // Fetch data on mount
+ useEffect(() => {
+  fetchData();
+}, []);
+
+
+    // Handle select all checkbox
+    const handleSelectAll = (checked: boolean) => {
+      if (checked) {
+        setSelectedRows(userData.map((user) => user.id));
+      } else {
+        setSelectedRows([]);
+      }
+    };
+  
+    // Handle individual row selection
+    const handleSelectRow = (checked: boolean, id: number) => {
+      if (checked) {
+        setSelectedRows((prev) => [...prev, id]);
+      } else {
+        setSelectedRows((prev) => prev.filter((rowId) => rowId !== id));
+      }
+    };
+  
+    // Handle delete selected rows
+    const handleDelete = async(ids: number[]) => {
+      await handleUserDelete(ids);
+      setSelectedRows([]); // Clear selection
+      fetchData(); // Refetch users
+    };
 
   return (
     <div>
@@ -127,7 +132,7 @@ export function TableDemo() {
                     <Button
                       variant="destructive"
                       size="sm"
-                      onClick={handleDelete}
+                      onClick={()=> handleDelete(selectedRows)}
                       className="flex items-center gap-2"
                     >
                       <Trash2 className="h-4 w-4" />
