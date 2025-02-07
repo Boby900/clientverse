@@ -12,7 +12,7 @@ import {
 } from "@/components/ui/table";
 import { Checkbox } from "@/components/ui/checkbox";
 import { Button } from "@/components/ui/button";
-import { Trash2 } from "lucide-react";
+import { Trash2, Plus } from "lucide-react";
 import {
   AlertDialog,
   AlertDialogAction,
@@ -163,7 +163,7 @@ function EditCard() {
   }
 
   return (
-    <div className="p-4 relative min-h-screen">
+    <div className="p-4 relative">
       <Table>
         <TableHeader>
           <TableRow>
@@ -184,49 +184,69 @@ function EditCard() {
           </TableRow>
         </TableHeader>
         <TableBody>
-          {data.tableData.map((row) => (
-            <TableRow key={row.id}>
-              <TableCell>
-                <Checkbox
-                  checked={selectedRows.has(row.id)}
-                  onCheckedChange={() => handleSelectRow(row.id)}
-                />
+          {data.tableData.length === 0 ? (
+            <TableRow>
+              <TableCell
+                colSpan={columns.length + 1}
+                className="h-24 text-center"
+              >
+                <div className="flex flex-col items-center justify-center space-y-4">
+                  <p className="text-muted-foreground">No data available</p>
+                  <Button className="flex items-center space-x-2">
+                    <Plus className="h-4 w-2" />
+                    <span>New Record</span>
+                  </Button>
+                </div>
               </TableCell>
-              {columns.map((column: string) => (
-                <TableCell key={`${row.id}-${column}`}>
-                  {row[column] || "N/A"}
-                </TableCell>
-              ))}
             </TableRow>
-          ))}
+          ) : (
+            data.tableData.map((row) => (
+              <TableRow key={row.id}>
+                <TableCell>
+                  <Checkbox
+                    checked={selectedRows.has(row.id)}
+                    onCheckedChange={() => handleSelectRow(row.id)}
+                  />
+                </TableCell>
+                {columns.map((column: string) => (
+                  <TableCell key={`${row.id}-${column}`}>
+                    {row[column] || "N/A"}
+                  </TableCell>
+                ))}
+              </TableRow>
+            ))
+          )}
         </TableBody>
       </Table>
 
       {selectedRows.size > 0 && (
         <div className="fixed bottom-6 inset-x-0 flex justify-center">
-        <AlertDialog>
-  <AlertDialogTrigger asChild>
-    <Button variant="destructive" size="lg" className="shadow-lg">
-      Delete Selected ({selectedRows.size})
-    </Button>
-  </AlertDialogTrigger>
-  <AlertDialogContent>
-    <AlertDialogHeader>
-      <AlertDialogTitle>Are you absolutely sure?</AlertDialogTitle>
-      <AlertDialogDescription>
-        This action cannot be undone. This will permanently delete your record.
-      </AlertDialogDescription>
-    </AlertDialogHeader>
-    <AlertDialogFooter>
-      <AlertDialogCancel>Cancel</AlertDialogCancel>
-      <AlertDialogAction onClick={handleDelete} className="flex items-center gap-2">
-        <Trash2 className="h-4 w-4" />
-        Delete Selected ({selectedRows.size})
-      </AlertDialogAction>
-    </AlertDialogFooter>
-  </AlertDialogContent>
-</AlertDialog>
-
+          <AlertDialog>
+            <AlertDialogTrigger asChild>
+              <Button variant="destructive" size="lg" className="shadow-lg">
+                Delete Selected ({selectedRows.size})
+              </Button>
+            </AlertDialogTrigger>
+            <AlertDialogContent>
+              <AlertDialogHeader>
+                <AlertDialogTitle>Are you absolutely sure?</AlertDialogTitle>
+                <AlertDialogDescription>
+                  This action cannot be undone. This will permanently delete
+                  your record.
+                </AlertDialogDescription>
+              </AlertDialogHeader>
+              <AlertDialogFooter>
+                <AlertDialogCancel>Cancel</AlertDialogCancel>
+                <AlertDialogAction
+                  onClick={handleDelete}
+                  className="flex items-center gap-2"
+                >
+                  <Trash2 className="h-4 w-4" />
+                  Delete Selected ({selectedRows.size})
+                </AlertDialogAction>
+              </AlertDialogFooter>
+            </AlertDialogContent>
+          </AlertDialog>
         </div>
       )}
     </div>
