@@ -8,6 +8,7 @@
 [] refactor RBAC more, only admin should have the right to delete the users.
 [] fix the mobile responsiveness for the different mobiles, user avatar and delete button is not visible at 100% zoom.
 [] move pinata uploader to creating tables >> selected fields >> then the option to upload the image >> fetch and render the image in dynamic generated tables.
-[] add a confirmation dialog when deleting the users and rows in tables, HINT: Shadcn UI 
 [] fix the pricing in the mobile menu.
 [] when creating new collection in a mobile menu db icon is disappearing and being override by New badge.
+[] add this site to a google search console for SEO.
+[] add robots.txt and sitempas, metadata for the better SEO.
