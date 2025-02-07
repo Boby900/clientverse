@@ -107,7 +107,9 @@ function Navbar() {
               <DropdownMenuContent className="bg-background/95 backdrop-blur">
                 <DropdownMenuSeparator />
                 <DropdownMenuItem className="hover:bg-primary/10 transition-colors">
-                  <span>Pricing</span>
+                  <span>
+                    <Pricing />
+                  </span>
                 </DropdownMenuItem>
                 <DropdownMenuItem className="hover:bg-primary/10 transition-colors">
                   <span>Documentation</span>
