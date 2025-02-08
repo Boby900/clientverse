@@ -1,6 +1,12 @@
 "use client";
-
-import { useParams } from "react-router";
+import {
+  Sheet,
+  SheetContent,
+  SheetHeader,
+  SheetTitle,
+  SheetTrigger,
+} from "@/components/ui/sheet";
+import { useParams, useSearchParams } from "react-router";
 import { useEffect, useState } from "react";
 import {
   Table,
@@ -24,6 +30,7 @@ import {
   AlertDialogTitle,
   AlertDialogTrigger,
 } from "@/components/ui/alert-dialog.tsx";
+import { ProfileForm } from "./ProfileForm";
 interface TableRow {
   id: string;
   [key: string]: string;
@@ -49,6 +56,8 @@ interface ApiData {
 
 function EditCard() {
   const { id } = useParams();
+  const [searchParams] = useSearchParams();
+  const tableName = searchParams.get("tableName") || "";
   const [data, setData] = useState<ApiResponse | null>(null);
   const [collectionName, setCollectionName] = useState("");
   const [loading, setLoading] = useState(true);
@@ -156,7 +165,7 @@ function EditCard() {
   const columns = data.metadata[0]?.selectedFields
     ? JSON.parse(data.metadata[0].selectedFields)
     : [];
-
+    const filteredColumns = columns.filter((col: string) => col !== "id");
   // Add ID column as it's always present
   if (!columns.includes("id")) {
     columns.unshift("id");
@@ -192,10 +201,22 @@ function EditCard() {
               >
                 <div className="flex flex-col items-center justify-center space-y-4">
                   <p className="text-muted-foreground">No data available</p>
-                  <Button className="flex items-center space-x-2">
-                    <Plus className="h-4 w-2" />
-                    <span>New Record</span>
-                  </Button>
+                  <Sheet>
+                    <SheetTrigger className="inline-flex items-center justify-center rounded-md text-sm font-medium ring-offset-background transition-colors focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2 disabled:pointer-events-none disabled:opacity-50 bg-secondary text-destructive-foreground hover:bg-secondary/90 h-8 px-4 py-2">
+                      New Record <Plus className="ml-1" size={20} />
+                    </SheetTrigger>
+                    <SheetContent>
+                      <SheetHeader>
+                        <SheetTitle>
+                          New {tableName || ""} record
+                        </SheetTitle>
+                        <ProfileForm
+                          selectedFields={filteredColumns}
+                          tableName={tableName}
+                        />
+                      </SheetHeader>
+                    </SheetContent>
+                  </Sheet>
                 </div>
               </TableCell>
             </TableRow>
