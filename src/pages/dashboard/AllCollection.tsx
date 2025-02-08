@@ -63,7 +63,7 @@ function AllCollection() {
   console.log("Role Data:", roleData);
 
   return (
-    <div className="grid sm:grid-cols-2 gap-6 p-6  rounded-lg">
+    <div className="grid grid-cols-1 sm:grid-cols-2 gap-6 p-6 rounded-lg max-w-full overflow-x-hidden">
       {loading || roleData === null ? (
         <p>Loading collections...</p>
       ) : data.length > 0 ? (
@@ -71,7 +71,7 @@ function AllCollection() {
           const selectedFields = card.selectedFields; // Parse selected fields for each card
           return (
             <div key={index}>
-              <Card className="overflow-hidden transition-all duration-300 hover:shadow-lg">
+              <Card className="overflow-hidden transition-all duration-300 hover:shadow-lg w-full">
                 <CardHeader className="relative overflow-hidden pb-8">
                   <div className="absolute inset-0 bg-gradient-to-r from-primary to-primary-foreground opacity-10"></div>
                   <Flame className={`w-8 h-8 mb-2`} />
@@ -97,7 +97,7 @@ function AllCollection() {
                   )}
                 </CardContent>
 
-                <CardFooter className="flex justify-between items-center">
+                <CardFooter className="flex flex-wrap gap-2 justify-between items-center">
                   <Button
                     variant="secondary"
                     size="sm"
@@ -110,7 +110,7 @@ function AllCollection() {
                   {/* add the form in here to submit the data and insert it into the specific table*/}
                   <Sheet>
                     <SheetTrigger className="inline-flex items-center justify-center rounded-md text-sm font-medium ring-offset-background transition-colors focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2 disabled:pointer-events-none disabled:opacity-50 bg-secondary text-destructive-foreground hover:bg-secondary/90 h-8 px-4 py-2">
-                      Insert data <PlusCircle size={20} />{" "}
+                      New Record <PlusCircle className="ml-1" size={20} />
                     </SheetTrigger>
                     <SheetContent>
                       <SheetHeader>
@@ -126,13 +126,9 @@ function AllCollection() {
                   </Sheet>
                   <AlertDialog>
                     <AlertDialogTrigger>
-                      {roleData === "viewer" ? (
-                        ""
-                      ) : (
-                        <div className="inline-flex items-center justify-center rounded-md text-sm font-medium ring-offset-background transition-colors focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2 disabled:pointer-events-none disabled:opacity-50 bg-destructive text-destructive-foreground hover:bg-destructive/90 h-8 px-4 py-2">
-                          Delete <Trash2 size={16} />
-                        </div>
-                      )}
+                      <div className="inline-flex items-center justify-center rounded-md text-sm font-medium ring-offset-background transition-colors focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2 disabled:pointer-events-none disabled:opacity-50 bg-destructive text-destructive-foreground hover:bg-destructive/90 h-8 px-4 py-2">
+                        Delete <Trash2 size={16} />
+                      </div>
                     </AlertDialogTrigger>
                     <AlertDialogContent>
                       <AlertDialogHeader>
@@ -164,91 +160,85 @@ function AllCollection() {
         <p>No collections found.</p>
       )}
       {!loading && pagination && pagination.totalPages > 1 && (
-        <div className="mt-8 flex gap-1 items-center space-x-4">
-          {/* "Previous" button */}
-          <Button
-            onClick={handlePrevious}
-            disabled={currentPage === 1} // Disable if on the first page
-            variant="outline"
-          >
-            Previous
-          </Button>
-          {/* Current page display */}
-          <span className="text-sm">
-            Page {currentPage} of {pagination.totalPages}
-          </span>
+        <div className="col-span-full">
+          <div className="mt-8 flex flex-wrap gap-4 items-center justify-center">
+            <div className="flex items-center gap-2">
+              <Button
+                onClick={handlePrevious}
+                disabled={currentPage === 1}
+                variant="outline"
+                size="sm"
+              >
+                Previous
+              </Button>
+              <span className="text-sm whitespace-nowrap">
+                Page {currentPage} of {pagination.totalPages}
+              </span>
+              <Button
+                onClick={handleNext}
+                disabled={currentPage === pagination.totalPages}
+                variant="outline"
+                size="sm"
+              >
+                Next
+              </Button>
+            </div>
 
-          {/* Numbered pagination */}
-          <div className="flex space-x-2">
-            {pagination.totalPages > 5 ? (
-              <>
-                {/* Always show the first two pages */}
-                <Button
-                  key={1}
-                  onClick={() => handlePageChange(1)}
-                  variant={currentPage === 1 ? "default" : "outline"}
-                >
-                  1
-                </Button>
-                <Button
-                  key={2}
-                  onClick={() => handlePageChange(2)}
-                  variant={currentPage === 2 ? "default" : "outline"}
-                >
-                  2
-                </Button>
-
-                {/* Add "..." if currentPage is far from the beginning */}
-                {currentPage > 4 && <span>...</span>}
-
-                {/* Show the current page if it's between the first and last two */}
-                {currentPage > 2 && currentPage < pagination.totalPages - 1 && (
+            <div className="flex gap-2 overflow-x-auto pb-2 max-w-full">
+              {pagination.totalPages > 5 ? (
+                <>
                   <Button
-                    key={currentPage}
-                    onClick={() => handlePageChange(currentPage)}
-                    variant="default"
+                    key={1}
+                    onClick={() => handlePageChange(1)}
+                    variant={currentPage === 1 ? "default" : "outline"}
+                    size="sm"
                   >
-                    {currentPage}
+                    1
                   </Button>
-                )}
+                  {currentPage > 3 && <span className="px-2">...</span>}
 
-                {/* Add "..." if currentPage is far from the end */}
-                {currentPage < pagination.totalPages - 3 && <span>...</span>}
+                  {currentPage > 2 &&
+                    currentPage < pagination.totalPages - 1 && (
+                      <Button
+                        key={currentPage}
+                        onClick={() => handlePageChange(currentPage)}
+                        variant="default"
+                        size="sm"
+                      >
+                        {currentPage}
+                      </Button>
+                    )}
 
-                {/* Always show the last two pages */}
-                <Button
-                  key={pagination.totalPages}
-                  onClick={() => handlePageChange(pagination.totalPages)}
-                  variant={
-                    currentPage === pagination.totalPages
-                      ? "default"
-                      : "outline"
-                  }
-                >
-                  {pagination.totalPages}
-                </Button>
-              </>
-            ) : (
-              // Render all pages if totalPages <= 5
-              Array.from({ length: pagination.totalPages }, (_, index) => (
-                <Button
-                  key={index + 1}
-                  onClick={() => handlePageChange(index + 1)}
-                  variant={currentPage === index + 1 ? "default" : "outline"}
-                >
-                  {index + 1}
-                </Button>
-              ))
-            )}
+                  {currentPage < pagination.totalPages - 2 && (
+                    <span className="px-2">...</span>
+                  )}
+                  <Button
+                    key={pagination.totalPages}
+                    onClick={() => handlePageChange(pagination.totalPages)}
+                    variant={
+                      currentPage === pagination.totalPages
+                        ? "default"
+                        : "outline"
+                    }
+                    size="sm"
+                  >
+                    {pagination.totalPages}
+                  </Button>
+                </>
+              ) : (
+                Array.from({ length: pagination.totalPages }, (_, index) => (
+                  <Button
+                    key={index + 1}
+                    onClick={() => handlePageChange(index + 1)}
+                    variant={currentPage === index + 1 ? "default" : "outline"}
+                    size="sm"
+                  >
+                    {index + 1}
+                  </Button>
+                ))
+              )}
+            </div>
           </div>
-          {/* "Next" button */}
-          <Button
-            onClick={handleNext}
-            disabled={currentPage === pagination.totalPages} // Disable if on the last page
-            variant="outline"
-          >
-            Next
-          </Button>
         </div>
       )}
     </div>
