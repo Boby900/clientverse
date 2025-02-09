@@ -1,10 +1,17 @@
 "use client";
-
-import { useParams } from "react-router";
+import {
+  Sheet,
+  SheetContent,
+  SheetHeader,
+  SheetTitle,
+  SheetTrigger,
+} from "@/components/ui/sheet";
+import { useParams, useSearchParams } from "react-router";
 import { useEffect, useState } from "react";
 import {
   Table,
   TableBody,
+  TableCaption,
   TableCell,
   TableHead,
   TableHeader,
@@ -24,6 +31,8 @@ import {
   AlertDialogTitle,
   AlertDialogTrigger,
 } from "@/components/ui/alert-dialog.tsx";
+import { ProfileForm } from "./ProfileForm";
+import { BreadcrumbNavigation } from "./BreadCrumb";
 interface TableRow {
   id: string;
   [key: string]: string;
@@ -49,40 +58,42 @@ interface ApiData {
 
 function EditCard() {
   const { id } = useParams();
+  const [searchParams] = useSearchParams();
+  const tableName = searchParams.get("tableName") || "";
   const [data, setData] = useState<ApiResponse | null>(null);
   const [collectionName, setCollectionName] = useState("");
   const [loading, setLoading] = useState(true);
   const [selectedRows, setSelectedRows] = useState<Set<string>>(new Set());
 
-  useEffect(() => {
-    const fetchCardData = async () => {
-      setLoading(true);
-      try {
-        const apiUrl = import.meta.env.VITE_API_URL;
-        const response = await fetch(`${apiUrl}/api/collection/${id}`, {
-          method: "GET",
-          headers: {
-            "Content-Type": "application/json",
-          },
-          credentials: "include",
-        });
+  const fetchCardData = async () => {
+    setLoading(true);
+    try {
+      const apiUrl = import.meta.env.VITE_API_URL;
+      const response = await fetch(`${apiUrl}/api/collection/${id}`, {
+        method: "GET",
+        headers: {
+          "Content-Type": "application/json",
+        },
+        credentials: "include",
+      });
 
-        if (response.ok) {
-          const result: ApiData = await response.json();
-          setData(result);
-          const collectionName = result.metadata[0].tableName;
-          console.log("result", collectionName);
-          setCollectionName(collectionName);
-        } else {
-          console.error("Failed to fetch card data");
-        }
-      } catch (error) {
-        console.error("Error fetching card data:", error);
-      } finally {
-        setLoading(false);
+      if (response.ok) {
+        const result: ApiData = await response.json();
+        setData(result);
+        const collectionName = result.metadata[0].tableName;
+        console.log("result", collectionName);
+        setCollectionName(collectionName);
+      } else {
+        console.error("Failed to fetch card data");
       }
-    };
+    } catch (error) {
+      console.error("Error fetching card data:", error);
+    } finally {
+      setLoading(false);
+    }
+  };
 
+  useEffect(() => {
     fetchCardData();
   }, [id]);
   const handleSelectAll = () => {
@@ -156,7 +167,7 @@ function EditCard() {
   const columns = data.metadata[0]?.selectedFields
     ? JSON.parse(data.metadata[0].selectedFields)
     : [];
-
+  const filteredColumns = columns.filter((col: string) => col !== "id");
   // Add ID column as it's always present
   if (!columns.includes("id")) {
     columns.unshift("id");
@@ -164,25 +175,32 @@ function EditCard() {
 
   return (
     <div className="p-4 relative">
+      <BreadcrumbNavigation
+        collectionName={collectionName}
+        onRefresh={fetchCardData}
+      />
       <Table>
-        <TableHeader>
-          <TableRow>
-            <TableHead className="w-12">
-              <Checkbox
-                checked={
-                  selectedRows.size === data.tableData.length &&
-                  data.tableData.length > 0
-                }
-                onCheckedChange={handleSelectAll}
-              />
+      <TableCaption>A list of your recent data.</TableCaption>
+      <TableHeader>
+
+        <TableRow>
+          <TableHead className="w-12">
+            <Checkbox
+              checked={
+                selectedRows.size === data.tableData.length &&
+                data.tableData.length > 0
+              }
+              onCheckedChange={handleSelectAll}
+            />
+          </TableHead>
+          {columns.map((column: string) => (
+            <TableHead key={column} className="capitalize">
+              {column.replace(/([A-Z])/g, " $1").trim()}
             </TableHead>
-            {columns.map((column: string) => (
-              <TableHead key={column} className="capitalize">
-                {column.replace(/([A-Z])/g, " $1").trim()}
-              </TableHead>
-            ))}
-          </TableRow>
+          ))}
+        </TableRow>
         </TableHeader>
+
         <TableBody>
           {data.tableData.length === 0 ? (
             <TableRow>
@@ -192,10 +210,20 @@ function EditCard() {
               >
                 <div className="flex flex-col items-center justify-center space-y-4">
                   <p className="text-muted-foreground">No data available</p>
-                  <Button className="flex items-center space-x-2">
-                    <Plus className="h-4 w-2" />
-                    <span>New Record</span>
-                  </Button>
+                  <Sheet>
+                    <SheetTrigger className="inline-flex items-center justify-center rounded-md text-sm font-medium ring-offset-background transition-colors focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2 disabled:pointer-events-none disabled:opacity-50 bg-secondary text-destructive-foreground hover:bg-secondary/90 h-8 px-4 py-2">
+                      New Record <Plus className="ml-1" size={20} />
+                    </SheetTrigger>
+                    <SheetContent>
+                      <SheetHeader>
+                        <SheetTitle>New {tableName || ""} record</SheetTitle>
+                        <ProfileForm
+                          selectedFields={filteredColumns}
+                          tableName={tableName}
+                        />
+                      </SheetHeader>
+                    </SheetContent>
+                  </Sheet>
                 </div>
               </TableCell>
             </TableRow>

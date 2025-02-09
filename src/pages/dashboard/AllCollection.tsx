@@ -16,7 +16,7 @@ import {
 } from "@/components/ui/sheet";
 
 import { Button } from "@/components/ui/button";
-import { Flame, MoveRight, PlusCircle, Trash2 } from "lucide-react";
+import { Flame, MoveRight, Plus, Trash2 } from "lucide-react";
 // import { PaginationDemo } from "./pagination";
 import { useFetchCollections } from "@/lib/utils";
 import { useNavigate } from "react-router";
@@ -102,7 +102,7 @@ function AllCollection() {
                     variant="secondary"
                     size="sm"
                     onClick={() =>
-                      navigate(`/dashboard/collections/${card.id}`)
+                      navigate(`/dashboard/collections/${card.id}?tableName=${card.tableName}`)
                     }
                   >
                     Visit <MoveRight />
@@ -110,7 +110,7 @@ function AllCollection() {
                   {/* add the form in here to submit the data and insert it into the specific table*/}
                   <Sheet>
                     <SheetTrigger className="inline-flex items-center justify-center rounded-md text-sm font-medium ring-offset-background transition-colors focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2 disabled:pointer-events-none disabled:opacity-50 bg-secondary text-destructive-foreground hover:bg-secondary/90 h-8 px-4 py-2">
-                      New Record <PlusCircle className="ml-1" size={20} />
+                      New Record <Plus className="ml-1" size={20} />
                     </SheetTrigger>
                     <SheetContent>
                       <SheetHeader>
