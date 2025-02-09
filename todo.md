@@ -12,4 +12,4 @@
 [] add robots.txt and sitempas, metadata for the better SEO.
 [] setup analytics using the Posthog.
 [] if could integrate the Axiom for the live data in logs components.
-[] add the bread crumb in the header of the collections/:id something like collections/{tableName} "O" refresh button for fetching the current data.
+[] add a passkey for the authentication.

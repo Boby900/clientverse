@@ -11,6 +11,7 @@ import { useEffect, useState } from "react";
 import {
   Table,
   TableBody,
+  TableCaption,
   TableCell,
   TableHead,
   TableHeader,
@@ -31,6 +32,7 @@ import {
   AlertDialogTrigger,
 } from "@/components/ui/alert-dialog.tsx";
 import { ProfileForm } from "./ProfileForm";
+import { BreadcrumbNavigation } from "./BreadCrumb";
 interface TableRow {
   id: string;
   [key: string]: string;
@@ -63,35 +65,35 @@ function EditCard() {
   const [loading, setLoading] = useState(true);
   const [selectedRows, setSelectedRows] = useState<Set<string>>(new Set());
 
-  useEffect(() => {
-    const fetchCardData = async () => {
-      setLoading(true);
-      try {
-        const apiUrl = import.meta.env.VITE_API_URL;
-        const response = await fetch(`${apiUrl}/api/collection/${id}`, {
-          method: "GET",
-          headers: {
-            "Content-Type": "application/json",
-          },
-          credentials: "include",
-        });
+  const fetchCardData = async () => {
+    setLoading(true);
+    try {
+      const apiUrl = import.meta.env.VITE_API_URL;
+      const response = await fetch(`${apiUrl}/api/collection/${id}`, {
+        method: "GET",
+        headers: {
+          "Content-Type": "application/json",
+        },
+        credentials: "include",
+      });
 
-        if (response.ok) {
-          const result: ApiData = await response.json();
-          setData(result);
-          const collectionName = result.metadata[0].tableName;
-          console.log("result", collectionName);
-          setCollectionName(collectionName);
-        } else {
-          console.error("Failed to fetch card data");
-        }
-      } catch (error) {
-        console.error("Error fetching card data:", error);
-      } finally {
-        setLoading(false);
+      if (response.ok) {
+        const result: ApiData = await response.json();
+        setData(result);
+        const collectionName = result.metadata[0].tableName;
+        console.log("result", collectionName);
+        setCollectionName(collectionName);
+      } else {
+        console.error("Failed to fetch card data");
       }
-    };
+    } catch (error) {
+      console.error("Error fetching card data:", error);
+    } finally {
+      setLoading(false);
+    }
+  };
 
+  useEffect(() => {
     fetchCardData();
   }, [id]);
   const handleSelectAll = () => {
@@ -165,7 +167,7 @@ function EditCard() {
   const columns = data.metadata[0]?.selectedFields
     ? JSON.parse(data.metadata[0].selectedFields)
     : [];
-    const filteredColumns = columns.filter((col: string) => col !== "id");
+  const filteredColumns = columns.filter((col: string) => col !== "id");
   // Add ID column as it's always present
   if (!columns.includes("id")) {
     columns.unshift("id");
@@ -173,25 +175,32 @@ function EditCard() {
 
   return (
     <div className="p-4 relative">
+      <BreadcrumbNavigation
+        collectionName={collectionName}
+        onRefresh={fetchCardData}
+      />
       <Table>
-        <TableHeader>
-          <TableRow>
-            <TableHead className="w-12">
-              <Checkbox
-                checked={
-                  selectedRows.size === data.tableData.length &&
-                  data.tableData.length > 0
-                }
-                onCheckedChange={handleSelectAll}
-              />
+      <TableCaption>A list of your recent data.</TableCaption>
+      <TableHeader>
+
+        <TableRow>
+          <TableHead className="w-12">
+            <Checkbox
+              checked={
+                selectedRows.size === data.tableData.length &&
+                data.tableData.length > 0
+              }
+              onCheckedChange={handleSelectAll}
+            />
+          </TableHead>
+          {columns.map((column: string) => (
+            <TableHead key={column} className="capitalize">
+              {column.replace(/([A-Z])/g, " $1").trim()}
             </TableHead>
-            {columns.map((column: string) => (
-              <TableHead key={column} className="capitalize">
-                {column.replace(/([A-Z])/g, " $1").trim()}
-              </TableHead>
-            ))}
-          </TableRow>
+          ))}
+        </TableRow>
         </TableHeader>
+
         <TableBody>
           {data.tableData.length === 0 ? (
             <TableRow>
@@ -207,9 +216,7 @@ function EditCard() {
                     </SheetTrigger>
                     <SheetContent>
                       <SheetHeader>
-                        <SheetTitle>
-                          New {tableName || ""} record
-                        </SheetTitle>
+                        <SheetTitle>New {tableName || ""} record</SheetTitle>
                         <ProfileForm
                           selectedFields={filteredColumns}
                           tableName={tableName}
