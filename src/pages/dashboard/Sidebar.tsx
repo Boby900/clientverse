@@ -83,10 +83,10 @@ function Sidebar() {
                     className="flex items-center px-4 py-3 text-gray-300 hover:bg-gray-800 hover:text-gray-100 rounded-lg transition-colors duration-200"
                     onClick={item.title === "Collections" ? handleCollectionsClick : undefined}
                   >
-                    <item.icon className="h-6 w-6 mr-4" />
+                    <item.icon className="h-6 w-6" />
                     <span className="hidden sm:inline">{item.title}</span>
                     {item.title === "Collections" && isNew && (
-                      <Badge className="ml-auto bg-blue-600 text-gray-100">New</Badge>
+                      <Badge className="sm:ml-auto bg-blue-600 text-gray-100">New</Badge>
                     )}
                   </Link>
                 </motion.div>
