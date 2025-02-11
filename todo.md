@@ -11,3 +11,4 @@
 [] setup analytics using the Posthog.
 [] if could integrate the Axiom for the live data in logs components.
 [] add a passkey for the authentication.
+[] add a button to download the content of the table as the json.
