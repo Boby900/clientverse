@@ -13,8 +13,18 @@ import {
   DropdownMenuTrigger,
 } from "@radix-ui/react-dropdown-menu";
 import { Check, FlameIcon, Github, Menu } from "lucide-react";
+import { useEffect } from "react";
+import { usePostHog } from 'posthog-js/react';
 
 function Navbar() {
+  const posthog = usePostHog()
+
+  useEffect(() => {
+    posthog?.capture("page_view", {
+      page: "Navbar",
+      url: window.location.href,
+    });
+  }, [posthog]);
   return (
     <div className={`font-Ubuntu `}>
       <nav className="sticky top-0 z-50">
