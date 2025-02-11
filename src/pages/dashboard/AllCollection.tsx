@@ -1,25 +1,12 @@
-"use client";
-import {
-  Card,
-  CardContent,
-  CardDescription,
-  CardFooter,
-  CardHeader,
-  CardTitle,
-} from "@/components/ui/card";
-import {
-  Sheet,
-  SheetContent,
-  SheetHeader,
-  SheetTitle,
-  SheetTrigger,
-} from "@/components/ui/sheet";
+"use client"
+import { Card, CardContent, CardDescription, CardFooter, CardHeader, CardTitle } from "@/components/ui/card"
+import { Sheet, SheetContent, SheetHeader, SheetTitle, SheetTrigger } from "@/components/ui/sheet"
 
-import { Button } from "@/components/ui/button";
-import { Flame, MoveRight, Plus, Trash2 } from "lucide-react";
+import { Button } from "@/components/ui/button"
+import { Flame, Loader2, MoveRight, Plus, Trash2 } from "lucide-react"
 // import { PaginationDemo } from "./pagination";
-import { useFetchCollections } from "@/lib/utils";
-import { useNavigate } from "react-router";
+import { useFetchCollections } from "@/lib/utils"
+import { useNavigate } from "react-router"
 import {
   AlertDialog,
   AlertDialogAction,
@@ -30,61 +17,51 @@ import {
   AlertDialogHeader,
   AlertDialogTitle,
   AlertDialogTrigger,
-} from "@/components/ui/alert-dialog.tsx";
-import { Badge } from "@/components/ui/badge";
+} from "@/components/ui/alert-dialog.tsx"
+import { Badge } from "@/components/ui/badge"
 
-import { ProfileForm } from "@/pages/dashboard/ProfileForm";
-import { useRole } from "@/hooks/roleContext";
-import { useEffect, useState } from "react";
+import { ProfileForm } from "@/pages/dashboard/ProfileForm"
+import { useRole } from "@/hooks/roleContext"
+import { useEffect, useState } from "react"
 
 function AllCollection() {
-  const [roleData, setRoleData] = useState<"admin" | "viewer" | null>(null);
+  const [roleData, setRoleData] = useState<"admin" | "viewer" | null>(null)
 
-  const navigate = useNavigate();
+  const navigate = useNavigate()
 
-  const {
-    data,
-    loading,
-    pagination,
-    currentPage,
-    handlePrevious,
-    handleNext,
-    handleDelete,
-    handlePageChange,
-  } = useFetchCollections();
+  const { data, loading, pagination, currentPage, handlePrevious, handleNext, handleDelete, handlePageChange } =
+    useFetchCollections()
 
-  const role = useRole();
+  const role = useRole()
   useEffect(() => {
     if (role?.role) {
-      setRoleData(role.role);
+      setRoleData(role.role)
     }
-  }, [role]); // Run effect when `role` changes
+  }, [role]) // Run effect when `role` changes
 
-  console.log("Role Data:", roleData);
+  console.log("Role Data:", roleData)
 
   return (
     <div className="grid grid-cols-1 sm:grid-cols-2 gap-6 p-6 rounded-lg max-w-full overflow-x-hidden">
       {loading || roleData === null ? (
-        <p>Loading collections...</p>
+        <div className="col-span-full flex items-center justify-center gap-2">
+          <Loader2 className="h-4 w-4 animate-spin" />
+          <p>Loading collections...</p>
+        </div>
       ) : data.length > 0 ? (
         data.map((card, index) => {
-          const selectedFields = card.selectedFields; // Parse selected fields for each card
+          const selectedFields = card.selectedFields // Parse selected fields for each card
           return (
             <div key={index}>
               <Card className="overflow-hidden transition-all duration-300 hover:shadow-lg w-full">
                 <CardHeader className="relative overflow-hidden pb-8">
                   <div className="absolute inset-0 bg-gradient-to-r from-primary to-primary-foreground opacity-10"></div>
                   <Flame className={`w-8 h-8 mb-2`} />
-                  <CardTitle className="text-lg truncate font-bold">
-                    {card.tableName}
-                  </CardTitle>
+                  <CardTitle className="text-lg truncate font-bold">{card.tableName}</CardTitle>
                 </CardHeader>
-                <CardDescription className="text-center font-bold p-1">
-                  Selected fields
-                </CardDescription>
+                <CardDescription className="text-center font-bold p-1">Selected fields</CardDescription>
                 <CardContent>
-                  {Array.isArray(selectedFields) &&
-                  selectedFields.length > 0 ? (
+                  {Array.isArray(selectedFields) && selectedFields.length > 0 ? (
                     <div className="flex gap-2 mt-2 flex-wrap">
                       {selectedFields.map((field, fieldIndex) => (
                         <Badge key={fieldIndex} variant="outline">
@@ -101,9 +78,7 @@ function AllCollection() {
                   <Button
                     variant="secondary"
                     size="sm"
-                    onClick={() =>
-                      navigate(`/dashboard/collections/${card.id}?tableName=${card.tableName}`)
-                    }
+                    onClick={() => navigate(`/dashboard/collections/${card.id}?tableName=${card.tableName}`)}
                   >
                     Visit <MoveRight />
                   </Button>
@@ -114,13 +89,8 @@ function AllCollection() {
                     </SheetTrigger>
                     <SheetContent>
                       <SheetHeader>
-                        <SheetTitle>
-                          New {card.tableName || ""} record
-                        </SheetTitle>
-                        <ProfileForm
-                          selectedFields={selectedFields}
-                          tableName={card.tableName}
-                        />
+                        <SheetTitle>New {card.tableName || ""} record</SheetTitle>
+                        <ProfileForm selectedFields={selectedFields} tableName={card.tableName} />
                       </SheetHeader>
                     </SheetContent>
                   </Sheet>
@@ -132,29 +102,22 @@ function AllCollection() {
                     </AlertDialogTrigger>
                     <AlertDialogContent>
                       <AlertDialogHeader>
-                        <AlertDialogTitle>
-                          Are you absolutely sure?
-                        </AlertDialogTitle>
+                        <AlertDialogTitle>Are you absolutely sure?</AlertDialogTitle>
                         <AlertDialogDescription>
-                          This action cannot be undone. This will permanently
-                          delete your record and remove your data from our
-                          servers.
+                          This action cannot be undone. This will permanently delete your record and remove your data
+                          from our servers.
                         </AlertDialogDescription>
                       </AlertDialogHeader>
                       <AlertDialogFooter>
                         <AlertDialogCancel>Cancel</AlertDialogCancel>
-                        <AlertDialogAction
-                          onClick={() => handleDelete(card.id)}
-                        >
-                          Delete
-                        </AlertDialogAction>
+                        <AlertDialogAction onClick={() => handleDelete(card.id)}>Delete</AlertDialogAction>
                       </AlertDialogFooter>
                     </AlertDialogContent>
                   </AlertDialog>
                 </CardFooter>
               </Card>
             </div>
-          );
+          )
         })
       ) : (
         <p>No collections found.</p>
@@ -163,23 +126,13 @@ function AllCollection() {
         <div className="col-span-full">
           <div className="mt-8 flex flex-wrap gap-4 items-center justify-center">
             <div className="flex items-center gap-2">
-              <Button
-                onClick={handlePrevious}
-                disabled={currentPage === 1}
-                variant="outline"
-                size="sm"
-              >
+              <Button onClick={handlePrevious} disabled={currentPage === 1} variant="outline" size="sm">
                 Previous
               </Button>
               <span className="text-sm whitespace-nowrap">
                 Page {currentPage} of {pagination.totalPages}
               </span>
-              <Button
-                onClick={handleNext}
-                disabled={currentPage === pagination.totalPages}
-                variant="outline"
-                size="sm"
-              >
+              <Button onClick={handleNext} disabled={currentPage === pagination.totalPages} variant="outline" size="sm">
                 Next
               </Button>
             </div>
@@ -197,29 +150,17 @@ function AllCollection() {
                   </Button>
                   {currentPage > 3 && <span className="px-2">...</span>}
 
-                  {currentPage > 2 &&
-                    currentPage < pagination.totalPages - 1 && (
-                      <Button
-                        key={currentPage}
-                        onClick={() => handlePageChange(currentPage)}
-                        variant="default"
-                        size="sm"
-                      >
-                        {currentPage}
-                      </Button>
-                    )}
-
-                  {currentPage < pagination.totalPages - 2 && (
-                    <span className="px-2">...</span>
+                  {currentPage > 2 && currentPage < pagination.totalPages - 1 && (
+                    <Button key={currentPage} onClick={() => handlePageChange(currentPage)} variant="default" size="sm">
+                      {currentPage}
+                    </Button>
                   )}
+
+                  {currentPage < pagination.totalPages - 2 && <span className="px-2">...</span>}
                   <Button
                     key={pagination.totalPages}
                     onClick={() => handlePageChange(pagination.totalPages)}
-                    variant={
-                      currentPage === pagination.totalPages
-                        ? "default"
-                        : "outline"
-                    }
+                    variant={currentPage === pagination.totalPages ? "default" : "outline"}
                     size="sm"
                   >
                     {pagination.totalPages}
@@ -242,7 +183,8 @@ function AllCollection() {
         </div>
       )}
     </div>
-  );
+  )
 }
 
-export default AllCollection;
+export default AllCollection
+
