@@ -19,7 +19,7 @@ import {
 } from "@/components/ui/table";
 import { Checkbox } from "@/components/ui/checkbox";
 import { Button } from "@/components/ui/button";
-import { Trash2, Plus } from "lucide-react";
+import { Trash2, Plus, Loader2 } from "lucide-react";
 import {
   AlertDialog,
   AlertDialogAction,
@@ -156,7 +156,9 @@ function EditCard() {
     }
   };
   if (loading) {
-    return <div className="p-4 text-center">Loading card details...</div>;
+    return  <div className="col-span-full flex items-center justify-center gap-2">
+    <Loader2 className="h-4 w-4 animate-spin" />
+  </div>
   }
 
   if (!data) {
