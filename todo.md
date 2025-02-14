@@ -12,4 +12,5 @@
 [] if could integrate the Axiom for the live data in logs components.
 [] add a passkey for the authentication.
 [] add a button to export the content of the table as the json.
+[] breadcrumb,tablename and fetch icon should be static when refreshig the data.
 [] add a button to import the content of the other files as the table as the json.

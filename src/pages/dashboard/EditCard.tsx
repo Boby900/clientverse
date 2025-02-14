@@ -64,9 +64,14 @@ function EditCard() {
   const [collectionName, setCollectionName] = useState("");
   const [loading, setLoading] = useState(true);
   const [selectedRows, setSelectedRows] = useState<Set<string>>(new Set());
+  const [refreshing, setRefreshing] = useState(false);
 
-  const fetchCardData = async () => {
-    setLoading(true);
+  const fetchCardData = async (isRefresh = false) => {
+    if (isRefresh) {
+      setRefreshing(true);
+    } else {
+      setLoading(true);
+    }
     try {
       const apiUrl = import.meta.env.VITE_API_URL;
       const response = await fetch(`${apiUrl}/api/collection/${id}`, {
@@ -89,13 +94,21 @@ function EditCard() {
     } catch (error) {
       console.error("Error fetching card data:", error);
     } finally {
-      setLoading(false);
+      if (isRefresh) {
+        setRefreshing(false);
+      } else {
+        setLoading(false);
+      }
     }
   };
 
   useEffect(() => {
     fetchCardData();
   }, [id]);
+
+  const handleRefresh = () => {
+    fetchCardData(true);
+  };
   const handleSelectAll = () => {
     if (selectedRows.size === data?.tableData.length) {
       setSelectedRows(new Set());
@@ -179,8 +192,16 @@ function EditCard() {
     <div className="p-4 relative">
       <BreadcrumbNavigation
         collectionName={collectionName}
-        onRefresh={fetchCardData}
+        onRefresh={handleRefresh}
       />
+
+      {
+        refreshing && (
+          <div className="absolute inset-0 bg-background/50 flex items-center justify-center z-10">
+          <Loader2 className="h-6 w-6 animate-spin" />
+        </div>
+        )
+      }
       <Table>
       <TableCaption>A list of your recent data.</TableCaption>
       <TableHeader>
