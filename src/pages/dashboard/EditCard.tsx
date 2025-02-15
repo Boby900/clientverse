@@ -171,7 +171,7 @@ function EditCard() {
   if (loading) {
     return (
       <div className="col-span-full flex items-center justify-center gap-2">
-        <Loader2 className="h-6 w-6 animate-spin" />
+        <Loader2 data-testid="progressbar" className="h-6 w-6 animate-spin" />
       </div>
     );
   }
