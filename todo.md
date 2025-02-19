@@ -13,3 +13,5 @@
 [] add a passkey for the authentication.
 [] add a button to export the content of the table as the json.
 [] add a button to import the content of the other files as the table as the json.
+[] even without validating the otp a user is being created in the db so have a look at it("signup endpoint").
+[] beautify the otp entering input field and the otp sent message, ref: V0.dev

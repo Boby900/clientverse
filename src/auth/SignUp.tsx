@@ -65,7 +65,7 @@ export const SignUp = () => {
 
   const handleVerifyCode = async () => {
     try {
-      const response = await fetch(`${apiUrl}/api/auth/send-verification`, {
+      const response = await fetch(`${apiUrl}/api/auth/verify-email`, {
         method: "POST",
         headers: {
           "Content-Type": "application/json",
