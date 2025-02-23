@@ -22,10 +22,13 @@ const LoginSchema = z.object({
 
 export const Login = () => {
   const [error, setError] = useState("");
+  const [verificationSent, setVerificationSent] = useState(false)
+    const [verificationCode, setVerificationCode] = useState("")
+    const [email, setEmail] = useState("") // Store email after signup
   const apiUrl = import.meta.env.VITE_API_URL;
   const navigate = useNavigate();
 
-  const handleSignUp = async (e: React.FormEvent<HTMLFormElement>) => {
+  const handleLogin = async (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault();
     const formData = new FormData(e.currentTarget);
     const data = {
@@ -46,7 +49,9 @@ export const Login = () => {
       const result = await response.json();
       
       if(response.ok){
-        navigate("/dashboard");
+        setEmail(validatedData.email) // Store the email
+        setVerificationSent(true)
+        setError("")
       }
       else {
         setError(result.message);
@@ -63,6 +68,32 @@ export const Login = () => {
       }
     }
   };
+
+  const handleVerifyCode = async () => {
+    try {
+      const response = await fetch(`${apiUrl}/api/auth/verify-email`, {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+        },
+        body: JSON.stringify({
+          email: email, // Use the stored email
+          code: verificationCode,
+        }),
+      })
+
+      if (response.ok) {
+        navigate("/dashboard")
+      } else {
+        const result = await response.json()
+        setError(result.message || "Invalid verification code.")
+      }
+    } catch (error) {
+      console.error("Verification error:", error)
+      setError("An unexpected error occurred during verification.")
+    }
+  }
+
 
   const githubLoginUrl = `${apiUrl}/api/auth/github/login`;
   const googleLoginUrl = `${apiUrl}/api/auth/google/login`;
@@ -96,7 +127,7 @@ export const Login = () => {
             {error && (<p className="text-sm text-red-500 text-center mt-2">{error}</p>)}
           </CardHeader>
           <CardContent className="space-y-4">
-            <form onSubmit={handleSignUp} className="space-y-4">
+            <form onSubmit={handleLogin} className="space-y-4">
               <div className="space-y-2">
                 <Label htmlFor="email" className="text-sm font-medium">Email</Label>
                 <Input 
@@ -149,6 +180,28 @@ export const Login = () => {
                 </Button>
               </a>
             </div>
+             {verificationSent && (
+                          <div className="mt-4 space-y-2">
+                            <p className="text-center text-sm text-gray-500">
+                              A verification code has been sent to your email address. Please enter it below to complete your
+                              registration.
+                            </p>
+                            <Input
+                              type="text"
+                              placeholder="Enter verification code"
+                              value={verificationCode}
+                              onChange={(e) => setVerificationCode(e.target.value)}
+                              className="w-full px-3 py-2 border rounded-md"
+                            />
+                            <Button
+                              onClick={handleVerifyCode}
+                              className="w-full bg-primary text-primary-foreground hover:bg-primary/90"
+                            >
+                              Verify Code
+                            </Button>
+                            {error && <p className="text-sm text-red-500 text-center mt-2">{error}</p>} {/* Error display */}
+                          </div>
+                        )}
           </CardContent>
           <CardFooter className="flex flex-col space-y-4 mt-6">
             <div className="text-center text-sm">
