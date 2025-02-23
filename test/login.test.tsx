@@ -45,8 +45,11 @@ describe("Login Component", () => {
   });
 
   it("submits valid form data and navigates to dashboard on successful login", async () => {
-    const mockResponse = { ok: true, json: vi.fn().mockResolvedValue({ message: "Logged in successfully" }) };
-    global.fetch = vi.fn().mockResolvedValue(mockResponse);
+    const mockLoginResponse = { ok: true, json: vi.fn().mockResolvedValue({ message: "Verification code sent" }) };
+    const mockVerifyResponse = { ok: true, json: vi.fn().mockResolvedValue({ message: "Verified" }) };
+    global.fetch = vi.fn()
+    .mockResolvedValueOnce(mockLoginResponse) // First fetch for login
+    .mockResolvedValueOnce(mockVerifyResponse); // Second fetch for verification    global.fetch = vi.fn().mockResolvedValue(mockResponse);
 
     render(<Login />);
 
@@ -56,8 +59,16 @@ describe("Login Component", () => {
     fireEvent.change(screen.getByLabelText(/password/i), { target: { value: "validpassword" } });
     fireEvent.click(screen.getByText(/Log In with Email/i));
 
-    await waitFor(() => {
-      expect(mockNavigate).toHaveBeenCalledWith("/dashboard");
-    });
+  // Simulate entering verification code
+  await waitFor(() => {
+    expect(screen.getByPlaceholderText(/Enter verification code/i)).toBeInTheDocument();
+  });
+
+  fireEvent.change(screen.getByPlaceholderText(/Enter verification code/i), { target: { value: "1456" } });
+  fireEvent.click(screen.getByText(/Verify Code/i));
+
+  await waitFor(() => {
+    expect(mockNavigate).toHaveBeenCalledWith("/dashboard");
+  });
   });
 });
