@@ -1,5 +1,4 @@
 **TODOs**
-[] more test cases using the vitest and React testing library.
 [] add password recovery, 2FA for the email auth using Lucia.
 [] fix the caching in the table demo component/RQ+TRPC implement it.
 [] every time there is new deployement there should be a new alert, via webhook.
@@ -14,6 +13,5 @@
 [] add a button to export the content of the table as the json.
 [] add a button to import the content of the other files as the table as the json.
 [] in the prod when logging/signing up using JIO, it's throwing an error("coming from the railway"), see console
-[] greet welcome to users using the Resend instead of sendgrid
 [] write the test cases for the otp verification both for the backend and frontend
-[] do the same beautification of entering the otps as done for the login for the signup("components/otp-input.tsx").
+[] test case failing, pass it and push to the prod.
