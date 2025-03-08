@@ -1,5 +1,3 @@
-"use client"
-
 import type React from "react"
 
 import { Button } from "@/components/ui/button"
@@ -11,6 +9,7 @@ import { Github, Mail } from "lucide-react"
 import { useState } from "react"
 import { useNavigate } from "react-router"
 import { Link } from "react-router"
+import { OTPInput } from "@/components/otp-input"
 
 const signupSchema = z.object({
   email: z.string().email("Invalid email address").min(5, "Email must be at least 5 characters"),
@@ -183,28 +182,25 @@ export const SignUp = () => {
                 </Button>
               </a>
             </div>
-            {verificationSent && (
-              <div className="mt-4 space-y-2">
-                <p className="text-center text-sm text-gray-500">
-                  A verification code has been sent to your email address. Please enter it below to complete your
-                  registration.
-                </p>
-                <Input
-                  type="text"
-                  placeholder="Enter verification code"
-                  value={verificationCode}
-                  onChange={(e) => setVerificationCode(e.target.value)}
-                  className="w-full px-3 py-2 border rounded-md"
-                />
-                <Button
-                  onClick={handleVerifyCode}
-                  className="w-full bg-primary text-primary-foreground hover:bg-primary/90"
-                >
-                  Verify Code
-                </Button>
-                {error && <p className="text-sm text-red-500 text-center mt-2">{error}</p>} {/* Error display */}
-              </div>
-            )}
+             {verificationSent && (
+                        <div className="mt-6 space-y-4">
+                          <div className="text-center space-y-2">
+                            <p className="text-sm font-medium text-gray-400">
+                              A verification code has been sent to your email address
+                            </p>
+                            <p className="text-xs text-gray-500">Please enter the 8-digit code below</p>
+                          </div>
+                          <OTPInput value={verificationCode} onChange={setVerificationCode} length={8} />
+                          <Button
+                            onClick={handleVerifyCode}
+                            className="w-full bg-primary text-primary-foreground hover:bg-primary/90"
+                            disabled={verificationCode.length !== 8}
+                          >
+                            Verify Code
+                          </Button>
+                          {error && <p className="text-sm text-red-500 text-center">{error}</p>}
+                        </div>
+                      )}
           </CardContent>
           <CardFooter className="flex flex-col space-y-4 mt-6">
             <div className="text-center text-sm">
